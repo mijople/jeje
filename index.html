@@ -1,0 +1,3165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>국가연구개발사업 제재처분 안건 초안 작성</title>
+<script defer src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://webfontworld.github.io/kopub/KoPubDotum.css');
+@import url('https://webfontworld.github.io/kopub/KoPubBatang.css');
+
+:root{
+  --ink:#1b2422; --ink-2:#414b46; --muted:#6f766f; --paper:#faf9f4; --paper-2:#f2f0e6;
+  --line:#d9d6c9; --line-strong:#b7b39f; --navy:#1c3450; --navy-2:#274f76;
+  --agent:#0f7d74; --agent-soft:#e7f4f1;
+  --law:#4a3f82; --law-soft:#efecf8;
+  --money:#1f6b46; --money-soft:#e9f5ee;
+  --user:#2f6298; --user-soft:#eaf2fa;
+  --amber:#96650f; --amber-soft:#fbf1dd;
+  --danger:#a13c3c; --danger-soft:#faecec;
+  --ok:#256b45; --focus:#1769aa;
+  --shadow:0 10px 28px rgba(30,38,34,.08),0 2px 8px rgba(30,38,34,.05);
+  --radius:10px;
+  --font:"KoPub Dotum","Pretendard Variable",-apple-system,sans-serif;
+  --serif:"KoPub Batang","Noto Serif KR",serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:var(--font);color:var(--ink);background:var(--paper);font-size:13px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;
+  background-image:radial-gradient(rgba(35,45,40,.05) .5px,transparent .7px);background-size:5px 5px;mix-blend-mode:multiply;z-index:0}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.45}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--focus) 45%,transparent);outline-offset:2px}
+a{color:var(--navy-2)}
+::selection{background:color-mix(in srgb,var(--agent) 25%,transparent)}
+
+/* 숫자 입력 스피너 숨김 */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
+
+.app{min-height:100%;display:flex;flex-direction:column;position:relative;z-index:1}
+
+/* ===== Masthead ===== */
+.masthead{background:var(--navy);color:#fff;border-bottom:1px solid #0e2135}
+.masthead-top{height:54px;display:flex;align-items:center;gap:16px;padding:0 20px}
+.seal{width:30px;height:30px;border:1.5px solid rgba(255,255,255,.55);border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:11px;font-weight:700;flex-shrink:0}
+.brand-name{font-family:var(--serif);font-size:14.5px;letter-spacing:-.2px;line-height:1.25}
+.brand-sub{font-size:9.5px;color:#b9c6d6;letter-spacing:1px;text-transform:uppercase}
+.masthead-actions{margin-left:auto;display:flex;gap:8px}
+.ghost-btn{border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;min-height:30px;padding:0 12px;border-radius:6px;font-size:11.5px;font-weight:600}
+.ghost-btn:hover{background:rgba(255,255,255,.1)}
+.law-strip{background:#0f253b;color:#c7d3e0;font-size:10.5px;padding:5px 20px;line-height:1.5}
+.step-strip{background:#132c46;display:flex;align-items:center;padding:0 16px;overflow-x:auto;gap:2px}
+.step-chip{display:flex;align-items:center;gap:6px;padding:8px 10px;font-size:11px;color:#8ea3ba;white-space:nowrap;border-bottom:2.5px solid transparent}
+.step-chip .num{width:16px;height:16px;border-radius:50%;border:1px solid #5c7089;display:grid;place-items:center;font-size:9px;flex-shrink:0}
+.step-chip.done{color:#bcd6c8}
+.step-chip.done .num{background:var(--agent);border-color:var(--agent);color:#fff}
+.step-chip.active{color:#fff;border-bottom-color:var(--agent)}
+.step-chip.active .num{background:#fff;color:var(--navy);border-color:#fff;font-weight:800}
+
+/* ===== Workspace 3-panel ===== */
+.workspace{display:grid;grid-template-columns:20% 40% 40%;flex:1;min-height:0}
+.workspace.discussion-mode{grid-template-columns:14% 56% 30%}
+.panel{min-width:0;min-height:0;height:calc(100vh - 54px - 24px - 34px);overflow:auto}
+.panel-log{background:#f5f4ee;border-right:1px solid var(--line)}
+.panel-center{background:var(--paper)}
+.panel-preview{background:#f1efe6;border-left:1px solid var(--line)}
+.panel-inner{padding:16px}
+.panel-title{position:sticky;top:0;z-index:5;background:inherit;padding:12px 14px;border-bottom:1px solid var(--line);backdrop-filter:blur(4px)}
+.panel-title h2{font-family:var(--serif);font-size:13px;margin:0;color:var(--navy)}
+.panel-title .eyebrow{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+/* mobile tabs */
+.mobile-tabs{display:none}
+@media (max-width:980px){
+  .workspace{grid-template-columns:1fr;display:block}
+  .panel{height:auto;border:none!important}
+  .panel{display:none}
+  .panel.mobile-active{display:block}
+  .mobile-tabs{display:flex;gap:0;background:#eceae0;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:9}
+  .mobile-tabs button{flex:1;padding:10px 6px;font-size:11.5px;font-weight:700;border:none;background:transparent;color:var(--muted);border-bottom:2px solid transparent}
+  .mobile-tabs button.active{color:var(--navy);border-bottom-color:var(--navy);background:#fff}
+}
+
+/* ===== Cards / notes ===== */
+.note-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:16px;position:relative}
+.note-card.compact{padding:14px}
+.note-card.soft{background:linear-gradient(180deg,#fff 0%,#fbfaf4 100%)}
+.note-card h3{margin:0 0 10px;font-size:13.5px;font-weight:800;color:var(--navy);border-bottom:1px solid var(--line);padding-bottom:8px;display:flex;align-items:center;gap:8px}
+.note-card h3 .tag{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--paper-2);color:var(--muted)}
+.field{margin-bottom:0}
+.field label{display:block;font-weight:700;font-size:11px;margin-bottom:4px;color:var(--ink-2)}
+.field .example{display:block;font-size:10px;color:var(--muted);margin-bottom:4px}
+.input,.textarea,.select{width:100%;border:1px solid var(--line-strong);background:#fff;color:var(--ink);padding:7px 9px;border-radius:6px;min-height:34px;font-size:12px}
+.textarea{min-height:76px;resize:vertical}
+.input:focus,.textarea:focus,.select:focus{border-color:var(--focus);box-shadow:0 0 0 2px rgba(23,105,170,.15);outline:0}
+.input::placeholder,.textarea::placeholder{color:#a7ab9e;font-size:11px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 14px}
+.form-grid.c3{grid-template-columns:repeat(3,1fr)}
+.form-grid.c1{grid-template-columns:1fr}
+@media (max-width:560px){.form-grid,.form-grid.c3{grid-template-columns:1fr}}
+
+.btn{border:1px solid var(--line-strong);background:#fff;color:var(--ink);min-height:34px;padding:6px 13px;border-radius:6px;font-weight:700;font-size:11.5px; display:inline-flex; align-items:center; justify-content:center;}
+.btn:hover:not(:disabled){background:var(--paper-2)}
+.btn:disabled{opacity:0.6; cursor:wait;}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.primary:hover:not(:disabled){background:var(--navy-2)}
+.btn.agent{background:var(--agent);border-color:var(--agent);color:#fff}
+.btn.law{background:var(--law);border-color:var(--law);color:#fff}
+.btn.money{background:var(--money);border-color:var(--money);color:#fff}
+.btn.danger-o{color:var(--danger);border-color:#e2b8b8;background:#fff;}
+.btn.danger-o:hover{background:var(--danger-soft);}
+.btn.small{min-height:27px;padding:4px 10px;font-size:10.5px}
+.btn.block{width:100%}
+.actions-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+
+/* status badges - color + text always */
+.status-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;border:1px solid transparent}
+.bg-ok{background:#e6f2ea;color:var(--ok);border-color:#bfe0cc}
+.bg-ok2{background:#e6f2ea;color:var(--ok);border-color:#bfe0cc}
+.bg-user{background:var(--user-soft);color:var(--user);border-color:#c3d9ec}
+.bg-info{background:#eef1f6;color:#43536b;border-color:#cfd7e4}
+.bg-warn{background:var(--amber-soft);color:var(--amber);border-color:#e9d29d}
+.bg-hold{background:#f0eee6;color:#6b6455;border-color:#d9d3c1}
+.bg-danger{background:var(--danger-soft);color:var(--danger);border-color:#eabcbc}
+.bg-final{background:#eaf1e9;color:#2c5c2f;border-color:#bcd6bd;font-weight:900}
+.bg-plain{background:#eee;color:#555;border-color:#ddd}
+
+/* ===== persona identity blocks ===== */
+.persona-head{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.persona-icon{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:13px;flex-shrink:0;color:#fff}
+.persona-icon.agent{background:var(--agent)}
+.persona-icon.law{background:var(--law)}
+.persona-icon.money{background:var(--money)}
+.persona-icon.user{background:var(--user)}
+.persona-name{font-weight:800;font-size:11.5px}
+.persona-name.agent{color:var(--agent)}
+.persona-name.law{color:var(--law)}
+.persona-name.money{color:var(--money)}
+.persona-name.user{color:var(--user)}
+.persona-role{font-size:9.5px;color:var(--muted)}
+
+.agent-card{border-left:4px solid var(--agent);background:var(--agent-soft);border-radius:0 8px 8px 0;padding:10px 12px;margin:8px 0;font-size:11.5px;animation:fadeIn .3s ease}
+.agent-card.law{border-left-color:var(--law);background:#f7f4fc}
+.agent-card.money{border-left-color:var(--money);background:#f2fbf6}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* current-topic banner */
+.topic-banner{background:var(--navy);color:#fff;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:11.5px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px}
+.topic-banner b{font-weight:800}
+.topic-banner .sub{color:#b9cfe2;font-size:10.5px}
+
+/* agent command center */
+.agent-command{background:#fff;border-bottom:1px solid var(--line);box-shadow:0 6px 18px rgba(30,38,34,.05);padding:12px 16px}
+.agent-command-inner{display:grid;grid-template-columns:1.25fr 1fr auto;gap:12px;align-items:center;max-width:1280px;margin:0 auto}
+.agent-kicker{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--agent);font-weight:900}
+.agent-command h2{font-family:var(--serif);font-size:14px;margin:2px 0;color:var(--navy)}
+.agent-command p{margin:0;color:var(--ink-2);font-size:11.5px;line-height:1.55}
+.agent-gates{display:flex;gap:6px;flex-wrap:wrap}
+.gate-pill{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--paper-2);color:var(--muted);border-radius:999px;padding:3px 8px;font-size:10px;font-weight:800}
+.gate-pill.pass{background:var(--agent-soft);border-color:#b5d9d4;color:var(--agent)}
+.gate-pill.stop{background:var(--danger-soft);border-color:#eabcbc;color:var(--danger)}
+.agent-command-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+@media (max-width:980px){.agent-command-inner{grid-template-columns:1fr}.agent-command-actions{justify-content:flex-start}}
+
+/* review item row */
+.review-item{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:#fff}
+
+/* preview paper */
+.preview-paper{background:#fff;border:1px solid #d6d1c1;box-shadow:0 6px 20px rgba(40,40,30,.07);padding:22px;font-family:var(--serif)}
+.preview-kicker{font-family:var(--font);font-size:9.5px;color:#767a6c;letter-spacing:1.6px;border-bottom:1px solid #2a2f29;padding-bottom:6px;margin-bottom:16px}
+.preview-paper h1{font-size:18px;text-align:center;margin:0 0 18px}
+.preview-paper h2{font-size:13px;margin:18px 0 7px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.preview-paper h3{font-size:12px;margin:10px 0 5px}
+.preview-paper p,.preview-paper li{font-family:var(--font);font-size:11.5px;line-height:1.65}
+.preview-paper table{width:100%;border-collapse:collapse;margin:6px 0;font-family:var(--font);font-size:10.5px}
+.preview-paper th,.preview-paper td{border:1px solid #c7c3b6;padding:6px 7px;text-align:left;vertical-align:top}
+.preview-paper th{background:#f1efe6;width:24%;font-weight:800}
+.pending-fill{color:var(--muted);font-style:italic}
+.src-badge{font-size:8.5px;background:#eee;color:#666;padding:1px 5px;border-radius:8px;margin-left:4px;font-family:var(--font);white-space:nowrap}
+
+/* chat widget */
+.chat-widget{position:fixed;bottom:20px;right:20px;background:var(--agent);color:#fff;padding:9px 16px;border-radius:24px;cursor:pointer;z-index:200;display:flex;align-items:center;gap:7px;font-weight:700;font-size:12px;box-shadow:0 4px 16px rgba(15,125,116,.38);user-select:none;transition:filter .15s}
+.chat-widget:hover{filter:brightness(1.08)}
+.chat-panel{position:fixed;bottom:62px;right:20px;width:320px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.14);z-index:201;display:none;flex-direction:column;max-height:440px}
+.chat-panel.open{display:flex}
+.chat-ph{background:var(--agent);color:#fff;padding:10px 14px;border-radius:12px 12px 0 0;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:12px;flex-shrink:0}
+.chat-ph-close{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;line-height:1;padding:0 2px}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:60px}
+.cmsg-user{align-self:flex-end;background:var(--user-soft);border:1px solid #c3d9ec;border-radius:10px 10px 0 10px;padding:7px 10px;max-width:82%;font-size:11.5px}
+.cmsg-agent{align-self:flex-start;background:var(--agent-soft);border:1px solid #b5d9d4;border-radius:10px 10px 10px 0;padding:7px 10px;max-width:92%;font-size:11.5px}
+.chat-ir{display:flex;gap:6px;padding:10px 12px;border-top:1px solid var(--line);flex-shrink:0}
+.chat-ir input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:6px 8px;font-family:inherit;font-size:12px}
+
+/* ===== 페르소나 토론 UI (메신저 스타일) ===== */
+.chat-row { display: flex; width: 100%; margin-bottom: 16px; gap: 10px; animation: fadeIn 0.3s ease; }
+.chat-row.law { flex-direction: row; }
+.chat-row.acc { flex-direction: row-reverse; }
+.chat-row.sys, .chat-row.usr { justify-content: center; }
+
+.chat-avatar { width: 38px; height: 38px; border-radius: 14px; display: grid; place-items: center; font-size: 18px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.08); color: #fff;}
+.chat-avatar.law { background: linear-gradient(135deg, var(--law), #6255a5); }
+.chat-avatar.acc { background: linear-gradient(135deg, var(--money), #2d8a5d); }
+.chat-avatar.sys { background: var(--agent); }
+.chat-avatar.usr { background: var(--user); }
+
+.chat-body { display: flex; flex-direction: column; max-width: 75%; }
+.chat-row.law .chat-body { align-items: flex-start; }
+.chat-row.acc .chat-body { align-items: flex-end; }
+.chat-row.sys .chat-body, .chat-row.usr .chat-body { align-items: center; max-width: 90%; }
+
+.chat-name { font-size: 11px; font-weight: 800; margin-bottom: 4px; padding: 0 4px; }
+.chat-name.law { color: var(--law); }
+.chat-name.acc { color: var(--money); }
+.chat-name.sys { color: var(--agent); }
+.chat-name.usr { color: var(--user); }
+
+.chat-bubble { padding: 12px 14px; border-radius: 14px; font-size: 11.5px; box-shadow: 0 4px 14px rgba(24,30,26,0.06); position: relative; line-height: 1.6; }
+.chat-bubble.law { background: var(--law-soft); border: 1px solid rgba(74,63,130,0.1); border-top-left-radius: 4px; }
+.chat-bubble.acc { background: var(--money-soft); border: 1px solid rgba(31,107,70,0.1); border-top-right-radius: 4px; text-align: right; }
+.chat-bubble.sys { background: var(--agent-soft); border: 1px solid rgba(15,125,116,0.2); text-align: center; }
+.chat-bubble.usr { background: #fff; border: 2px solid var(--user); text-align: center; box-shadow: 0 4px 12px rgba(47,98,152,0.15); }
+
+/* ── 모의 위원회 5인 전용 스타일 ── */
+/* 이민준 변호사 (공격) — 적색 계열 */
+.chat-row.law-prog{flex-direction:row}
+.chat-avatar.law-prog{background:linear-gradient(135deg,var(--danger),#c45050)}
+.chat-name.law-prog{color:var(--danger)}
+.chat-bubble.law-prog{background:var(--danger-soft);border:1.5px solid rgba(161,60,60,.2);border-top-left-radius:4px}
+/* 김태원 변호사 (수비) — 남보라 계열 */
+.chat-row.law-cons{flex-direction:row}
+.chat-avatar.law-cons{background:linear-gradient(135deg,#3d3472,#5c4fa0)}
+.chat-name.law-cons{color:#3d3472}
+.chat-bubble.law-cons{background:#f0edf9;border:1.5px solid rgba(61,52,114,.2);border-top-left-radius:4px}
+/* 박서연 회계사 (공격) — 오렌지 계열 */
+.chat-row.acc-prog{flex-direction:row-reverse}
+.chat-avatar.acc-prog{background:linear-gradient(135deg,#a85a00,#d07800)}
+.chat-name.acc-prog{color:#a85a00}
+.chat-bubble.acc-prog{background:#fff4e6;border:1.5px solid rgba(168,90,0,.2);border-top-right-radius:4px;text-align:right}
+/* 최두현 회계사 (수비) — 짙은 녹색 계열 */
+.chat-row.acc-cons{flex-direction:row-reverse}
+.chat-avatar.acc-cons{background:linear-gradient(135deg,var(--money),#2d8a5d)}
+.chat-name.acc-cons{color:var(--money)}
+.chat-bubble.acc-cons{background:var(--money-soft);border:1.5px solid rgba(31,107,70,.2);border-top-right-radius:4px;text-align:right}
+/* 정상민 행정전문가 — 앰버/황금 계열 */
+.chat-row.admin{flex-direction:row}
+.chat-avatar.admin{background:linear-gradient(135deg,#7a520a,var(--amber))}
+.chat-name.admin{color:#7a520a}
+.chat-bubble.admin{background:var(--amber-soft);border:1.5px solid rgba(150,101,15,.25);border-top-left-radius:4px}
+.chat-body.law-prog,.chat-body.law-cons,.chat-body.admin{align-items:flex-start}
+.chat-body.acc-prog,.chat-body.acc-cons{align-items:flex-end}
+
+/* log stream */
+.log-entry{border-left:2px solid var(--line-strong);padding:5px 0 5px 10px;margin-bottom:2px;font-size:10.5px}
+.log-entry .lt{color:var(--muted);font-size:9.5px}
+.log-entry .la{font-weight:800;font-size:10.5px}
+.log-entry.actor-agent{border-left-color:var(--agent)}
+.log-entry.actor-lawyer{border-left-color:var(--law)}
+.log-entry.actor-accountant{border-left-color:var(--money)}
+.log-entry.actor-user{border-left-color:var(--user)}
+.log-entry.actor-system{border-left-color:var(--amber)}
+
+.progress-dots{display:flex;gap:4px;margin:4px 0 10px}
+.progress-dots span{width:7px;height:7px;border-radius:50%;background:var(--line-strong)}
+.progress-dots span.on{background:var(--agent)}
+
+.structured-block{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 13px;line-height:1.7;font-size:11.5px;white-space:pre-wrap}
+.structured-block h4{margin:0 0 6px;font-size:12px;color:var(--navy)}
+.structured-block .subtle{color:var(--muted);font-size:10.5px}
+.term-pill{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;background:#f3f5f7;border:1px solid #d9e0e6;font-size:10px;font-weight:700;color:#53616f;margin:2px 4px 0 0}
+
+/* 양정기준(안) 버전 이력 */
+.proposal-history{border:1.5px solid #91bdb5;border-left:4px solid var(--agent);background:#fbfffd;margin:0 0 12px;padding:11px 12px;border-radius:8px;box-shadow:0 5px 14px rgba(15,125,116,.08)}
+.proposal-history.docked{position:relative;margin:0 0 8px;z-index:4;box-shadow:0 -5px 18px rgba(15,125,116,.11);border-width:1px 1px 1px 4px}
+.proposal-history.docked::before{content:'현재 양정안';position:absolute;left:10px;top:-9px;background:var(--agent);color:#fff;border-radius:999px;padding:1px 7px;font-size:8.5px;font-weight:900;letter-spacing:.2px}
+.proposal-history-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.proposal-history-title{font-size:12px;font-weight:900;color:var(--agent)}
+.proposal-flow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:8px 0;padding:7px 8px;background:var(--paper-2);border-radius:7px}
+.proposal-step{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line-strong);background:#fff;color:var(--ink-2);border-radius:999px;padding:3px 9px;font-size:10.5px;font-weight:800}
+.proposal-step.current{border-color:var(--agent);background:var(--agent-soft);color:var(--agent)}
+.proposal-step.confirmed{border-color:var(--ok);background:#e6f2ea;color:var(--ok)}
+.proposal-step.rejected{border-color:var(--danger);background:var(--danger-soft);color:var(--danger)}
+.proposal-arrow{color:var(--muted);font-weight:900;font-size:11px}
+.proposal-current-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.proposal-current-item{background:#fff;border:1px solid var(--line);border-radius:7px;padding:8px 10px;min-width:0}
+.proposal-current-item span{display:block;font-size:9.5px;color:var(--muted);font-weight:800;margin-bottom:2px}
+.proposal-current-item b{font-size:11.5px;color:var(--navy);overflow-wrap:anywhere}
+.proposal-version{border:1px solid var(--line);border-radius:8px;background:#fff;margin-top:7px;overflow:hidden}
+.proposal-version summary{list-style:none;cursor:pointer;padding:9px 11px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;font-weight:800;color:var(--navy)}
+.proposal-version summary::-webkit-details-marker{display:none}
+.proposal-version summary::after{content:'펼치기 ▾';font-size:9.5px;color:var(--muted);font-weight:700}
+.proposal-version[open] summary::after{content:'접기 ▴'}
+.proposal-version-body{border-top:1px solid var(--line);padding:10px 11px;background:#fcfcfa;display:grid;gap:7px}
+.proposal-review{border-left:3px solid var(--line-strong);padding-left:9px;font-size:10.8px;line-height:1.6;color:var(--ink-2)}
+.proposal-review.law{border-left-color:var(--law)}.proposal-review.acc{border-left-color:var(--money)}.proposal-review.user{border-left-color:var(--user)}
+.proposal-snapshot{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:7px 0}
+.proposal-snapshot span{display:inline-flex;align-items:center;gap:3px;padding:4px 7px;background:#fff;border:1px solid var(--line);border-radius:6px;font-size:10px;color:var(--ink-2)}
+.proposal-snapshot b{color:var(--navy)}
+.proposal-master-dropdown{margin-top:8px;border:1px solid var(--line);border-radius:7px;background:#fff;overflow:hidden}
+.proposal-master-dropdown>summary{cursor:pointer;list-style:none;padding:8px 10px;color:var(--navy);font-size:10.5px;font-weight:800;display:flex;justify-content:space-between;align-items:center}
+.proposal-master-dropdown>summary::-webkit-details-marker{display:none}
+.proposal-master-dropdown>summary::after{content:'▾';color:var(--muted)}
+.proposal-master-dropdown[open]>summary::after{content:'▴'}
+.proposal-master-body{border-top:1px solid var(--line);padding:8px;background:#f8f8f5;max-height:330px;overflow:auto}
+.proposal-version-label{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:7px;font-size:11px;font-weight:900;color:var(--navy)}
+.proposal-select-row{display:grid;grid-template-columns:minmax(120px,1fr) repeat(3,auto);gap:7px;align-items:end;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.proposal-select-row label{display:block;font-size:9.5px;color:var(--muted);font-weight:800;margin-bottom:3px}
+.proposal-selected-detail{margin-top:8px;border:1px solid var(--line);border-radius:7px;background:#fff;padding:9px;display:grid;gap:7px;max-height:245px;overflow:auto}
+.proposal-selected-detail .proposal-version-body{margin:0;border:0;background:transparent;padding:0}
+.proposal-direct-editor{margin-top:9px;border-color:rgba(47,98,152,.28);background:#f8fbff}
+.proposal-direct-editor>summary{color:var(--user);background:#f3f8fd}
+.proposal-direct-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:9px}
+@media (max-width:560px){.proposal-current-grid{grid-template-columns:1fr}.proposal-select-row{grid-template-columns:1fr 1fr}.proposal-select-row>div:first-child{grid-column:1/-1}.proposal-history.docked{margin-left:-2px;margin-right:-2px}.chat-widget{display:none!important}.chat-panel{right:8px;left:8px;width:auto}}
+
+@media print{
+  .masthead,.mobile-tabs,.panel-log,.panel-center,.floating-guide,.guide-popover,.no-print{display:none!important}
+  .workspace{display:block}
+  .panel-preview{border:none;height:auto;overflow:visible;background:#fff}
+}
+
+/* Spinner for API loading */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.spinner.dark {
+  border-color: rgba(0,0,0,.15);
+  border-top-color: var(--navy);
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+/* 스트리밍 중 커서 깜빡임 */
+.stream-cursor {
+  display: inline-block;
+  animation: blink .7s step-end infinite;
+  opacity: .8;
+  color: var(--agent);
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* OpenAI API key connection dialog */
+.api-modal-backdrop{position:fixed;inset:0;z-index:1000;background:rgba(10,25,39,.72);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px}
+.api-modal-backdrop.open{display:flex}
+.api-modal{width:min(480px,100%);background:#fff;border:1px solid rgba(255,255,255,.4);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.3);overflow:hidden}
+.api-modal-head{background:var(--navy);color:#fff;padding:22px 24px 19px;display:flex;align-items:center;gap:13px}
+.api-modal-logo{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.12);display:grid;place-items:center;font-size:21px;font-weight:900}
+.api-modal-head h2{font-size:17px;margin:0 0 3px}.api-modal-head p{font-size:11px;color:#c7d3e0;margin:0}
+.api-modal-body{padding:24px}
+.api-key-wrap{position:relative}.api-key-wrap .input{padding-right:72px;height:42px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.api-key-toggle{position:absolute;right:6px;top:6px;min-height:30px;border:0;background:var(--paper-2);border-radius:5px;padding:0 9px;color:var(--navy);font-size:10.5px;font-weight:800}
+.api-connect-state{margin:12px 0 0;padding:10px 12px;border-radius:8px;background:var(--paper-2);border:1px solid var(--line);font-size:11.5px;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+.api-connect-state.ok{background:#e6f2ea;border-color:#bfe0cc;color:var(--ok)}
+.api-connect-state.error{background:var(--danger-soft);border-color:#eabcbc;color:var(--danger)}
+.api-connect-state.testing{background:var(--user-soft);border-color:#c3d9ec;color:var(--user)}
+.api-dot{width:9px;height:9px;border-radius:50%;background:currentColor;flex-shrink:0;box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+.api-modal-help{font-size:10.5px;color:var(--muted);margin:12px 0 0;line-height:1.6}
+.api-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.api-status-button{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;min-height:30px;padding:0 11px;border-radius:20px;font-size:11px;font-weight:800}
+.api-status-button:hover{background:rgba(255,255,255,.15)}
+.api-status-button .api-dot{width:8px;height:8px;color:#f2bf56}.api-status-button.connected .api-dot{color:#62d291}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="chatWidget" class="chat-widget no-print" onclick="toggleChat()">💬 <span style="font-size:11px">도움이 필요하세요?</span></div>
+<div id="chatPanel" class="chat-panel no-print">
+  <div class="chat-ph"><span>✦ 안내 도우미</span><button class="chat-ph-close" onclick="toggleChat()">×</button></div>
+  <div id="chatMsgs" class="chat-msgs"></div>
+  <div class="chat-ir">
+    <input id="chatInput" placeholder="시스템 사용법이나 법령을 질문하세요..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="btn primary small" onclick="sendChat()">전송</button>
+  </div>
+</div>
+<div id="apiKeyModal" class="api-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="apiModalTitle">
+  <div class="api-modal">
+    <div class="api-modal-head">
+      <div class="api-modal-logo">AI</div>
+      <div><h2 id="apiModalTitle">OpenAI API 연결</h2><p>AI 자동화를 사용하려면 먼저 API 키를 연결해 주세요.</p></div>
+    </div>
+    <form class="api-modal-body" onsubmit="connectOpenAIApi(event)">
+      <label for="openaiApiKeyInput" style="display:block;font-size:11.5px;font-weight:800;margin-bottom:6px;color:var(--navy)">OpenAI API 키</label>
+      <div class="api-key-wrap">
+        <input id="openaiApiKeyInput" class="input" type="password" autocomplete="off" spellcheck="false" placeholder="sk-..." aria-describedby="apiKeyHelp apiConnectionState">
+        <button class="api-key-toggle" type="button" onclick="toggleApiKeyVisibility()">보기</button>
+      </div>
+      <div id="apiConnectionState" class="api-connect-state"><span class="api-dot"></span><span>API 키 입력 대기 중</span></div>
+      <p id="apiKeyHelp" class="api-modal-help">입력한 키는 이 페이지가 열려 있는 동안에만 메모리에 유지되며 브라우저 저장소에는 저장되지 않습니다.</p>
+      <div class="api-modal-actions">
+        <button id="apiConnectButton" class="btn primary" type="submit">연결 확인</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   OpenAI API 통신 함수
+   - API 키는 페이지 메모리에만 유지하고 브라우저 저장소에 남기지 않는다.
+   - 실제 API 요청 성공 후에만 연결 상태를 완료로 표시한다.
+   ============================================================ */
+const OPENAI_MODELS = ['gpt-5.6-luna','gpt-4.1-mini','gpt-4o-mini'];
+let openaiApiKey = '';
+let openaiConnectionState = 'disconnected';
+let cachedOpenAIModel = null;
+
+function getOpenAIApiKey() {
+  if (!openaiApiKey || openaiConnectionState !== 'connected') {
+    openOpenAIApiDialog();
+    throw new Error('OpenAI API가 연결되지 않았습니다. API 키를 연결해 주세요.');
+  }
+  return openaiApiKey;
+}
+
+function hasOpenAIApiKey() { return openaiConnectionState === 'connected' && !!openaiApiKey; }
+
+function setApiConnectionState(state, message) {
+  openaiConnectionState = state;
+  const el = document.getElementById('apiConnectionState');
+  if (el) {
+    el.className = `api-connect-state ${state === 'connected' ? 'ok' : state === 'error' ? 'error' : state === 'testing' ? 'testing' : ''}`;
+    el.innerHTML = `<span class="api-dot"></span><span>${esc(message)}</span>`;
+  }
+  document.querySelectorAll('[data-api-status]').forEach(el => {
+    el.classList.toggle('connected', state === 'connected');
+    const label = el.querySelector('[data-api-label]');
+    if (label) label.textContent = state === 'connected' ? 'OpenAI 연결됨' : state === 'testing' ? '연결 확인 중' : 'OpenAI 미연결';
+  });
+}
+
+function openOpenAIApiDialog() {
+  const modal = document.getElementById('apiKeyModal');
+  if (!modal) return;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  const input = document.getElementById('openaiApiKeyInput');
+  if (input) { input.value = openaiApiKey; setTimeout(() => input.focus(), 0); }
+  setApiConnectionState(hasOpenAIApiKey() ? 'connected' : 'disconnected', hasOpenAIApiKey() ? '✓ OpenAI API 연결 완료' : 'API 키 입력 대기 중');
+}
+
+function closeOpenAIApiDialog() {
+  document.getElementById('apiKeyModal')?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleApiKeyVisibility() {
+  const input = document.getElementById('openaiApiKeyInput');
+  const button = document.querySelector('.api-key-toggle');
+  if (!input) return;
+  input.type = input.type === 'password' ? 'text' : 'password';
+  if (button) button.textContent = input.type === 'password' ? '보기' : '숨기기';
+}
+
+async function connectOpenAIApi(event) {
+  event?.preventDefault();
+  const input = document.getElementById('openaiApiKeyInput');
+  const button = document.getElementById('apiConnectButton');
+  const candidate = (input?.value || '').trim();
+  if (!candidate) { setApiConnectionState('error', 'API 키를 입력해 주세요.'); input?.focus(); return; }
+  setApiConnectionState('testing', 'OpenAI API 연결을 확인하고 있습니다…');
+  if (button) { button.disabled = true; button.innerHTML = '<span class="spinner"></span>확인 중'; }
+  try {
+    const res = await fetch('https://api.openai.com/v1/models', {headers:{Authorization:`Bearer ${candidate}`}});
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error?.message || `연결 실패 (HTTP ${res.status})`);
+    }
+    const data = await res.json();
+    const availableIds = new Set((data.data || []).map(model => model.id));
+    cachedOpenAIModel = OPENAI_MODELS.find(model => availableIds.has(model)) || [...availableIds].find(model => /^gpt-(?:5|4)/.test(model)) || null;
+    if (!cachedOpenAIModel) throw new Error('사용 가능한 OpenAI 텍스트 생성 모델을 찾을 수 없습니다.');
+    openaiApiKey = candidate;
+    setApiConnectionState('connected', `✓ OpenAI API 연결 완료 — ${cachedOpenAIModel} 사용 가능`);
+    render();
+    setTimeout(closeOpenAIApiDialog, 650);
+  } catch (error) {
+    openaiApiKey = '';
+    cachedOpenAIModel = null;
+    setApiConnectionState('error', `연결 실패: ${error.message}`);
+  } finally {
+    if (button) { button.disabled = false; button.textContent = '연결 확인'; }
+  }
+}
+
+function resetOpenAIApiKey() {
+  openaiApiKey = '';
+  cachedOpenAIModel = null;
+  setApiConnectionState('disconnected', 'API 키 입력 대기 중');
+  render();
+  openOpenAIApiDialog();
+}
+
+function extractOpenAIText(data) {
+  if (typeof data.output_text === 'string') return data.output_text;
+  return (data.output || []).flatMap(item => item.content || []).filter(part => part.type === 'output_text').map(part => part.text || '').join('');
+}
+
+async function getOpenAIResponse(prompt, maxTokens = 900) {
+  const key = getOpenAIApiKey();
+  const model = cachedOpenAIModel || OPENAI_MODELS[0];
+  const res = await fetch('https://api.openai.com/v1/responses', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json',Authorization:`Bearer ${key}`},
+    body: JSON.stringify({model,input:prompt,max_output_tokens:maxTokens,store:false})
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error?.message || `API 오류 (HTTP ${res.status})`);
+  const text = extractOpenAIText(data);
+  if (!text) throw new Error('OpenAI 응답에서 텍스트를 찾을 수 없습니다.');
+  return text;
+}
+
+/* Responses API SSE 스트리밍 — 텍스트 delta가 도착하는 즉시 yield */
+async function* streamOpenAIText(prompt, maxTokens = 900) {
+  const key = getOpenAIApiKey();
+  const model = cachedOpenAIModel || OPENAI_MODELS[0];
+  const res = await fetch('https://api.openai.com/v1/responses', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json',Authorization:`Bearer ${key}`},
+    body: JSON.stringify({model,input:prompt,max_output_tokens:maxTokens,store:false,stream:true})
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API 오류 (HTTP ${res.status})`);
+  }
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = '';
+  while (true) {
+    const {done, value} = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, {stream: true});
+    const lines = buf.split('\n');
+    buf = lines.pop();
+    for (const line of lines) {
+      if (!line.startsWith('data:')) continue;
+      const json = line.slice(5).trim();
+      if (!json || json === '[DONE]') continue;
+      try {
+        const event = JSON.parse(json);
+        if (event.type === 'response.output_text.delta' && event.delta) yield event.delta;
+      } catch {}
+    }
+  }
+}
+
+function safeParseJSON(str) {
+  try {
+    const match = str.match(/\{[\s\S]*\}/);
+    if (match) return JSON.parse(match[0]);
+    return JSON.parse(str);
+  } catch(e) {
+    throw e;
+  }
+}
+
+/* ============================================================
+   0. 유틸 및 상태
+   ============================================================ */
+let lastScrollY = 0;
+
+function esc(s){
+  if(s===null||s===undefined) return '';
+  return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function nl2br(s){ return esc(s).replace(/\n/g,'<br>'); }
+function fmtWon(n){
+  if(n===null||n===undefined||n===''||isNaN(n)) return '';
+  return Number(n).toLocaleString('ko-KR')+'원';
+}
+function nowStr(){
+  const d=new Date();
+  const p=(n)=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function uid(prefix){ return prefix+Math.random().toString(36).slice(2,8); }
+function val(id){ const el=document.getElementById(id); return el? el.value : undefined; }
+function setVal(id,v){ const el=document.getElementById(id); if(el) el.value = v==null?'':v; }
+
+// AI가 생성한 토론 텍스트에서 화자(법률/회계 페르소나)와 대사 분리
+function parseDiscussionLines(text) {
+  const msgs = [];
+
+  // ── 전처리: 줄 단위로 분리하되 연속 빈 줄은 제거
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+
+  // 모델이 생성할 수 있는 다양한 화자 라벨 포맷을 모두 처리
+  // **, ##, 숫자+점, 꺽쇠, 대괄호 등 앞뒤 장식 허용
+  const LAW_RE = /^(?:[*#\[<\d.\s]+)?\s*(?:법률\s*페르소나|변호사)\s*(?:[*\]>]+)?\s*[:\-]\s*([\s\S]*)/i;
+  const ACC_RE = /^(?:[*#\[<\d.\s]+)?\s*(?:회계\s*페르소나|회계사)\s*(?:[*\]>]+)?\s*[:\-]\s*([\s\S]*)/i;
+  // [제안|...] 태그만 단독으로 있는 행 감지
+  const PROPOSAL_RE = /^\[제안\s*\|/;
+
+  lines.forEach(line => {
+    // ── [제안] 태그가 독립 행으로 온 경우 — 마지막 페르소나 발언에 붙임
+    if (PROPOSAL_RE.test(line)) {
+      const lastPersona = [...msgs].reverse().find(m => m.speaker === 'lawyer' || m.speaker === 'accountant');
+      if (lastPersona) {
+        // 이미 태그가 없을 때만 추가
+        if (!lastPersona.text.includes('[제안|')) lastPersona.text += ' ' + line;
+      } else {
+        // 페르소나 발언이 아직 없으면 회계 페르소나로 임시 부여
+        msgs.push({speaker: 'accountant', text: line});
+      }
+      return;
+    }
+
+    const lawMatch = line.match(LAW_RE);
+    const accMatch = line.match(ACC_RE);
+
+    if (lawMatch) {
+      const t = lawMatch[1].trim();
+      if (isMeaningfulPersonaText(t)) msgs.push({speaker: 'lawyer', text: t});
+    } else if (accMatch) {
+      const t = accMatch[1].trim();
+      if (isMeaningfulPersonaText(t)) msgs.push({speaker: 'accountant', text: t});
+    } else {
+      // 나머지는 sys로 보관하되, [제안] 태그 포함 여부를 normalizeDiscussionScript에서 재처리
+      msgs.push({speaker: 'sys', text: line});
+    }
+  });
+  return msgs;
+}
+
+// normalizeDiscussionScript: sys 메시지 중 [제안] 태그가 있으면 마지막 페르소나에 붙임
+function _attachOrphanProposalTags(msgs) {
+  const result = [];
+  msgs.forEach(m => {
+    if (m.speaker === 'sys' && /\[제안\s*\|/.test(m.text)) {
+      const lastP = [...result].reverse().find(r => r.speaker === 'lawyer' || r.speaker === 'accountant');
+      if (lastP && !lastP.text.includes('[제안|')) {
+        lastP.text += ' ' + m.text;
+      }
+      // sys [제안] 행 자체는 버림
+    } else {
+      result.push(m);
+    }
+  });
+  return result;
+}
+
+function isMeaningfulPersonaText(text) {
+  const compact = String(text || '').replace(/\s/g, '');
+  if (!compact) return false;
+  if (/^[.…·-]+$/.test(compact)) return false;
+  if (compact === '...') return false;
+  return compact.length >= 8;
+}
+
+/* ============================================================
+   1. 법령 마스터 데이터
+   ============================================================ */
+const legalReferences = {
+  misconduct: [ 
+    {key:'m1', no:1, article:'제31조제1항제1호', text:'연구개발자료 또는 연구개발성과를 위조ㆍ변조ㆍ표절하거나 저자를 부당하게 표시하는 행위'},
+    {key:'m2', no:2, article:'제31조제1항제2호', text:'제13조제3항에 따른 연구개발비의 사용용도와 제13조제4항에 따른 연구개발비 사용 기준을 위반한 행위'},
+    {key:'m3', no:3, article:'제31조제1항제3호', text:'제16조제1항부터 제3항까지의 규정을 위반하여 연구개발성과를 소유하거나 제3자에게 소유하게 한 행위'},
+    {key:'m4', no:4, article:'제31조제1항제4호', text:'제21조제1항에 따른 보안대책을 위반하거나 제21조제2항에 따라 보안과제로 분류된 연구개발과제의 보안사항을 누설하거나 유출하는 행위'},
+    {key:'m5', no:5, article:'제31조제1항제5호', text:'거짓이나 그 밖의 부정한 방법으로 연구개발과제를 신청하거나 이를 수행하는 행위'},
+    {key:'m6', no:6, article:'제31조제1항제6호', text:'그 밖에 국가연구개발활동의 건전성을 저해하는 행위로서 대통령령으로 정하는 행위'}
+  ],
+  sanctionGrounds: [ 
+    {key:'s1', no:1, article:'제32조제1항제1호', text:'제12조제2항에 따른 평가 결과 연구개발과제의 수행과정과 결과가 극히 불량한 경우'},
+    {key:'s2', no:2, article:'제32조제1항제2호', text:'연구자 또는 연구개발기관이 이 법 또는 협약에 따른 의무를 고의로 이행하지 아니하여 제15조제1항에 따라 연구개발과제가 변경 또는 중단된 경우'},
+    {key:'s3', no:3, article:'제32조제1항제3호', text:'연구자 또는 연구개발기관이 제31조제1항 각 호의 어느 하나에 해당하는 부정행위를 한 경우'},
+    {key:'s4', no:4, article:'제32조제1항제4호', text:'연구자 또는 연구개발기관이 정당한 사유 없이 연구개발과제의 수행을 포기한 경우'},
+    {key:'s5', no:5, article:'제32조제1항제5호', text:'연구개발기관이 정당한 사유 없이 제18조제2항에 따라 정부납부기술료를 납부하지 아니한 경우'},
+    {key:'s6', no:6, article:'제32조제1항제6호', text:'연구개발기관이 정당한 사유 없이 제13조제7항에 따른 연구개발비 회수 금액을 납부하지 아니한 경우'}
+  ],
+  basis: [
+    {key:'b32-1', article:'제32조제1항', text:'중앙행정기관의 장은 제재사유에 해당하는 경우 10년 이내의 범위에서 참여를 제한하거나, 이미 지급한 정부 연구개발비의 5배 범위에서 제재부가금을 부과할 수 있음'},
+    {key:'b32-2', article:'제32조제2항', text:'참여제한 처분과 제재부가금 부과처분은 병과할 수 있음'},
+    {key:'b32-3', article:'제32조제3항', text:'제재처분과 별도로 이미 지급한 정부 연구개발비 중 관련된 연구개발비를 환수할 수 있음'},
+    {key:'b32-4', article:'제32조제4항', text:'제재처분·환수 시 제재사유의 중대성, 위반행위의 고의 유무, 위반 횟수 등을 고려하여야 함'},
+    {key:'b32-5', article:'제32조제5항', text:'제재처분은 사유 발생 종료일부터 10년이 지나면 할 수 없음'},
+    {key:'b32-6', article:'제32조제6항', text:'구체적 부과율표는 시행령 별표에 따름'}
+  ],
+  procedure: {key:'p33', article:'제33조', text:'사전통지 → 20일 이내 재검토 요청 → 30일 이내 결정·통보'}
+};
+
+const LEGAL_NOTICE = "본 시스템은 제재처분 안건 작성 지원 에이전트입니다. 실제 처분 전에는 적용 법령, 시행령, 행정규칙과 증거 원문을 별도로 확인해야 합니다.";
+const UNKNOWN = "명확한 근거를 찾을 수 없음";
+
+/* ============================================================
+   모의 처분 위원회 — 5인 페르소나 메타데이터
+   ============================================================ */
+const MOCK_COMMITTEE = {
+  'law-prog': {
+    key: 'law-prog', name: '이민준', fullName: '이민준 변호사',
+    role: '공격형 변호사', icon: '⚖', badge: '공격',
+    side: 'left',
+    profile: '국가연구개발 행정소송 정부 패소 판례를 다수 분석한 공격형 변호사. 절차적 하자·재량권 일탈 포인트를 빠르게 찾아 직설적으로 지적한다.',
+    style: '단호하고 직설적. "이건 취소 가능합니다", "절차 하자 있어요" 식 표현을 자주 쓴다. 단문 위주, 자신감 넘침.'
+  },
+  'law-cons': {
+    key: 'law-cons', name: '김태원', fullName: '김태원 변호사',
+    role: '수비형 변호사', icon: '📜', badge: '수비',
+    side: 'left',
+    profile: '조문 원문·판례를 토씨 하나까지 확인하는 수비형 변호사. 불명확한 주장은 절대 하지 않으며, 처분 요건이 충족됐는지 꼼꼼히 점검한다.',
+    style: '신중하고 완서한 말투. "원문을 다시 보겠습니다", "이 부분은 좀 더 검토가 필요합니다" 식 표현. 결론보다 과정을 강조.'
+  },
+  'acc-prog': {
+    key: 'acc-prog', name: '박서연', fullName: '박서연 회계사',
+    role: '공격형 회계사', icon: '📊', badge: '공격',
+    side: 'right',
+    profile: '정부 패소 사례의 금액 산정 오류 패턴을 숙지한 공격형 회계사. 산식의 허점과 산정기초 혼용 오류를 빠르게 찾아낸다.',
+    style: '예리하고 단도직입적. "이 산식, 기초부터 다시 봐야 해요", "환수랑 부가금을 같은 기준으로 잡으면 안 됩니다" 식 표현.'
+  },
+  'acc-cons': {
+    key: 'acc-cons', name: '최두현', fullName: '최두현 회계사',
+    role: '수비형 회계사', icon: '🔢', badge: '수비',
+    side: 'right',
+    profile: '정산서를 줄 단위로 검토하는 꼼꼼한 회계사. 빠른 결론을 경계하며, 수치 근거를 하나씩 차분하게 확인한다.',
+    style: '천천히, 단계적. "서두르지 맙시다. 먼저 정산 원장부터 확인해야 합니다", "이 숫자의 출처를 명확히 해야 합니다" 식 표현.'
+  },
+  'admin': {
+    key: 'admin', name: '정상민', fullName: '정상민 행정전문가',
+    role: '행정전문가', icon: '🏛', badge: '행정',
+    side: 'left',
+    profile: '혁신법·행정절차법·행정기본법·행정소송법을 조문 단위로 적용하는 가장 엄격한 전문가. 법조문 밖의 발언은 하지 않는다.',
+    style: '공식적이고 건조한 말투. "행정절차법 제21조 사전통지 요건을 먼저 확인해야 합니다", "혁신법 제32조제4항의 고려 사항 반영 여부를 체크해야 합니다" 식 표현. 항상 조문 번호 명시.'
+  }
+};
+
+/* 이름→speaker 매핑 */
+const MOCK_NAME_MAP = {};
+Object.values(MOCK_COMMITTEE).forEach(p => { MOCK_NAME_MAP[p.name] = p.key; });
+
+/* 모의 토의 전용 파서 */
+function parseMockDiscussionLines(text) {
+  const msgs = [];
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+  // "이민준:" / "이민준 변호사:" / "이민준 변호사(공격):" 등 모두 허용
+  const PAT = Object.values(MOCK_COMMITTEE).map(p =>
+    ({ re: new RegExp(`^(?:[*#\\[<\\d.\\s]+)?\\s*${p.name}\\s*(?:[\\w()가-힣 ]*)?\\s*(?:[*\\]>]+)?\\s*[:\\-]\\s*([\\s\\S]*)`, 'i'), key: p.key })
+  );
+  lines.forEach(line => {
+    for (const { re, key } of PAT) {
+      const m = line.match(re);
+      if (m) {
+        const t = m[1].trim();
+        if (t.length >= 4) msgs.push({ speaker: key, text: t });
+        return;
+      }
+    }
+    msgs.push({ speaker: 'sys', text: line });
+  });
+  return msgs;
+}
+
+/* 모의 토의 전용 버블 빌더 */
+function buildMockBubblesHtml(msgs) {
+  return msgs.map(msg => {
+    const p = MOCK_COMMITTEE[msg.speaker];
+    if (!p) {
+      // sys / usr
+      const isSys = msg.speaker === 'sys';
+      return `<div class="chat-row sys"><div class="chat-body sys">
+        <div class="chat-bubble sys">
+          <div style="font-weight:800;color:var(--agent);margin-bottom:3px">${isSys ? '✦ 시스템' : '👤 위원장'}</div>
+          <div>${msg.text}</div>
+        </div></div></div>`;
+    }
+    const cls = p.key;
+    const bodyAlign = (p.side === 'right') ? 'align-items:flex-end' : 'align-items:flex-start';
+    const badgeColor = {
+      'law-prog':'var(--danger)', 'law-cons':'#3d3472',
+      'acc-prog':'#a85a00', 'acc-cons':'var(--money)', 'admin':'#7a520a'
+    }[cls] || 'var(--navy)';
+    return `
+    <div class="chat-row ${cls}">
+      <div class="chat-avatar ${cls}" style="font-size:17px">${p.icon}</div>
+      <div class="chat-body ${cls}" style="${bodyAlign}">
+        <div class="chat-name ${cls}">
+          ${p.fullName}&nbsp;<span style="font-size:9px;font-weight:800;padding:1px 5px;border-radius:8px;background:${badgeColor};color:#fff;vertical-align:middle">${p.badge}</span>
+        </div>
+        <div class="chat-bubble ${cls}">
+          <div>${nl2br(esc(msg.text))}${msg.streaming ? '<span class="stream-cursor">▌</span>' : ''}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ============================================================
+   2. 데이터 모델
+   ============================================================ */
+function defaultProcedureSteps(){
+  return [
+    {key:'detect', label:'문제 인지', status:'확인되지 않음', date:''},
+    {key:'investigate', label:'사실조사', status:'확인되지 않음', date:''},
+    {key:'settle', label:'정산', status:'확인되지 않음', date:''},
+    {key:'explain', label:'소명', status:'확인되지 않음', date:''},
+    {key:'panel', label:'평가단 검토', status:'확인되지 않음', date:''},
+    {key:'notice', label:'사전통지', status:'확인되지 않음', date:''},
+    {key:'opinion', label:'의견제출', status:'확인되지 않음', date:''},
+    {key:'reconsider', label:'재검토(이의신청 등)', status:'확인되지 않음', date:''}
+  ];
+}
+function createCasePacket(){
+  return {
+    phase:-1,
+    original_problem:"",
+    predicted_issues:[],
+    project:{
+      biz_name:"", project_name:"", project_number:"",
+      lead_institution:"", partner_institution:"",
+      pi_name:"", co_pi_name:"",
+      total_period_start:"", total_period_end:"",
+      stage_period_start:"", stage_period_end:"",
+      evaluation_result:""
+    },
+    funding:{ yearly:[], stages:[], government_support:null, private_cash:null, private_in_kind:null, actual_paid:null },
+    target:{ institution:"", pi:"", person:"", role:"", target_type:"" },
+    interviews:[],
+    procedure:{ steps:defaultProcedureSteps(), custom:[] },
+    violation:{ behavior:"", frequency:"" },
+    legal_issues:[],       
+    sanction_grounds:[],   
+    sanctions:{
+      participation_restriction:{final:"", basis:""},
+      recovery:{questioned_amount:null, formula:"", final_amount:null},
+      surcharge:{applicable:null, base_amount:null, formula:"", final_amount:null, basis:""},
+      other_measures:[],
+      confirmed_from_chat: false // 사용자가 채팅에서 양정을 확정했는지 여부
+    },
+    discussion:{
+      law_review:"",   // 법률 페르소나 검토 요약 (토론 완료 시 자동 저장)
+      acc_review:"",   // 회계 페르소나 검토 요약 (토론 완료 시 자동 저장)
+      completed_at:"", // 토론 완료 시각
+      proposal_history:[] // 1안 → 2안 → ... → 확정 이력
+    },
+    decisions:[],
+    missing_information:[],
+    final_document_markdown:"",
+    logs:[]
+  };
+}
+
+let cp = createCasePacket();
+const ui = {
+  chatOpen:false,
+  chatHistory:[],
+  mobileTab:'center',
+  interviewQs: null,
+  discScript:[], 
+  discStep:0,    
+  discDone:false,
+  discPaused:false,
+  isApiLoading:false,
+
+  mockDiscScript:[], 
+  mockDiscStep:0,    
+  mockDiscDone:false,
+  isMockApiLoading:false,
+
+  forceGenerate:false,
+  docTab:'doc'
+};
+let discTimer = null;
+let mockDiscTimer = null;
+let discStreamPatchFrame = null;
+
+/* ============================================================
+   3. 로그 / 결정 유틸
+   ============================================================ */
+function addLog(actor,type,text){
+  cp.logs.push({ id:uid('L'), time:nowStr(), phase:cp.phase, actor, type, text });
+}
+function makeDecision({topic, conclusion, basis=[], source=[], decidedBy}){
+  const d = { id:'D'+String(cp.decisions.length+1).padStart(3,'0'), phase:cp.phase, topic, conclusion, basis, source, decidedBy, timestamp:nowStr() };
+  cp.decisions.push(d);
+  addLog(decidedBy,'결정',`${topic} → ${conclusion}`);
+  return d;
+}
+function actorIcon(actor){
+  if(actor==='확인 에이전트'||actor==='시스템 에이전트'||actor==='시스템') return '✦';
+  if(actor==='변호사') return '⚖';
+  if(actor==='회계사') return '📊';
+  if(actor==='사용자') return '👤';
+  return '◆';
+}
+function actorClass(actor){
+  if(actor==='확인 에이전트'||actor==='시스템 에이전트'||actor==='시스템') return 'actor-agent';
+  if(actor==='변호사') return 'actor-lawyer';
+  if(actor==='회계사') return 'actor-accountant';
+  if(actor==='사용자') return 'actor-user';
+  return 'actor-system';
+}
+
+/* ============================================================
+   4. 인터뷰 질문
+   ============================================================ */
+function buildInterviewQuestions(){
+  const qs=[];
+  const sg = cp.sanction_grounds;
+  const mi = cp.legal_issues;
+
+  if(!cp.target.target_type) qs.push({key:'target_type', q:'제재 검토 대상은 연구개발기관인가요, 개인(연구자)인가요, 아니면 둘 다인가요?', reason:'제재대상자를 특정하기 위한 확인사항입니다.'});
+  qs.push({key:'detect_date', q:'문제가 된 행위가 최초로 확인(인지)된 시점은 언제인가요?', reason:'제척기간(10년) 판단의 기준 시점입니다.'});
+
+  if(sg.includes('s1')) qs.push({key:'poor_reason', q:'수행과정 또는 결과가 극히 불량하다고 판단된 구체적인 이유는 무엇인가요?', reason:'평가 결과 기반 제재사유 확인'});
+  if(mi.includes('m2') || sg.includes('s3')){
+    qs.push({key:'misuse_detail', q:'연구개발비를 어떤 용도로 사용하였나요? 사용 내역을 알려주세요.', reason:'사용기준 위반 여부 핵심 사실관계'});
+    qs.push({key:'amount_rough', q:'불인정 또는 문제 사용금액이 대략 어느 정도로 파악되나요?', reason:'문제금액 규모 사전 확인'});
+  }
+  if(mi.includes('m5')) qs.push({key:'fraud_method', q:'어떠한 방법으로 연구개발과제를 부정하게 신청하거나 수행하였나요?', reason:'부정한 방법의 구체적 내용 확인'});
+  
+  qs.push({key:'frequency', q:'해당 행위가 반복적으로 발생했나요, 1회성인가요?', reason:'고의성 및 가중 요소 판단'});
+  return qs.slice(0,5); 
+}
+
+/* ============================================================
+   5. 렌더 진입점 및 스크롤 유지
+   ============================================================ */
+function render(){
+  lastScrollY = window.scrollY; 
+  const app = document.getElementById('app');
+  app.innerHTML = renderMasthead() + renderWorkspace();
+  restoreSelectValues();
+  
+  requestAnimationFrame(() => { window.scrollTo(0, lastScrollY); });
+}
+
+function restoreSelectValues(){
+  document.querySelectorAll('select[data-bind]').forEach(sel=>{
+    const bind = sel.getAttribute('data-bind');
+    const v = bind.split('.').reduce((o,k)=> (o? o[k] : undefined), cp);
+    if(v!==undefined && v!==null) sel.value = v;
+  });
+}
+
+function renderMasthead(){
+  const steps = ['사건접수','사실확인','절차확인','법률·회계 종합토론','심의안정리','안건생성', '모의처분'];
+  let stepsHtml = '';
+  if(cp.phase>=0){
+    stepsHtml = steps.map((s,i)=>{
+      const cls = i<cp.phase?'done':(i===cp.phase?'active':'');
+      return `<div class="step-chip ${cls}"><span class="num">${i<cp.phase?'✓':i+1}</span>${esc(s)}</div>`;
+    }).join('');
+  }
+  return `
+  <header class="masthead no-print">
+    <div class="masthead-top">
+      <div class="seal">안건</div>
+      <div>
+        <div class="brand-name">국가연구개발사업 제재처분 안건 작성 지원 에이전트</div>
+        <div class="brand-sub">Sanction Agenda Drafting Support Agent</div>
+      </div>
+      <div class="masthead-actions">
+        ${cp.phase>=0?`<button class="ghost-btn" onclick="exportCasePacketJSON()">검토 기록 저장</button>`:''}
+        <button class="api-status-button ${hasOpenAIApiKey()?'connected':''}" data-api-status onclick="openOpenAIApiDialog()" title="OpenAI API 연결 상태">
+          <span class="api-dot"></span><span data-api-label>${hasOpenAIApiKey()?'OpenAI 연결됨':'OpenAI 미연결'}</span>
+        </button>
+        ${hasOpenAIApiKey()?`<button class="ghost-btn" onclick="resetOpenAIApiKey()">연결 해제</button>`:''}
+        <button class="ghost-btn" onclick="confirmReset()">새로고침(초기화)</button>
+      </div>
+    </div>
+    <div class="law-strip">⚠ ${esc(LEGAL_NOTICE)}</div>
+    ${cp.phase>=0?`<div class="step-strip">${stepsHtml}</div>`:''}
+  </header>`;
+}
+
+function renderWorkspace(){
+  if(cp.phase===-1) return renderLanding();
+  return `
+  ${renderAgentCommandCenter()}
+  <div class="mobile-tabs no-print">
+    <button class="${ui.mobileTab==='log'?'active':''}" onclick="setMobileTab('log')">진행기록</button>
+    <button class="${ui.mobileTab==='center'?'active':''}" onclick="setMobileTab('center')">작업패널</button>
+    <button class="${ui.mobileTab==='preview'?'active':''}" onclick="setMobileTab('preview')">안건미리보기</button>
+  </div>
+  <main class="workspace ${cp.phase===3?'discussion-mode':''}">
+    <section class="panel panel-log ${ui.mobileTab==='log'?'mobile-active':''}">
+      <div class="panel-title"><div class="eyebrow">Progress Log</div><h2>진행 기록</h2></div>
+      <div class="panel-inner">${renderLog()}</div>
+    </section>
+    <section class="panel panel-center ${ui.mobileTab==='center'?'mobile-active':''}">
+      ${renderCenter()}
+    </section>
+    <section class="panel panel-preview ${ui.mobileTab==='preview'?'mobile-active':''}">
+      <div class="panel-title"><div class="eyebrow">Live Draft</div><h2>안건 미리보기</h2></div>
+      <div class="panel-inner">${renderPreview()}</div>
+    </section>
+  </main>`;
+}
+
+function getAgentGates(){
+  const hasCase = !!(cp.original_problem && cp.project.project_name && cp.target.person);
+  const hasFunding = cp.funding.stages.length > 0 && cp.funding.stages.every(st => st.period_start && st.period_end && st.institutions.length);
+  const hasInterview = cp.interviews.length >= Math.min((ui.interviewQs || buildInterviewQuestions()).length, 5);
+  const hasProcedure = cp.procedure.steps.some(s => s.status !== '확인되지 않음');
+  const hasDiscussion = ui.discScript.some(m => m.speaker === 'lawyer' || m.speaker === 'accountant');
+  const hasProposal = cp.sanctions.confirmed_from_chat || !!(cp.sanctions.participation_restriction.final || cp.sanctions.recovery.final_amount || cp.sanctions.surcharge.final_amount);
+  const hasDraft = !!cp.final_document_markdown || cp.phase >= 5;
+  return [
+    {key:'case', label:'사건', pass:hasCase},
+    {key:'funding', label:'연구비', pass:hasFunding},
+    {key:'interview', label:'인터뷰', pass:hasInterview},
+    {key:'procedure', label:'절차', pass:hasProcedure},
+    {key:'discussion', label:'토론', pass:hasDiscussion},
+    {key:'proposal', label:'양정안', pass:hasProposal},
+    {key:'draft', label:'안건초안', pass:hasDraft}
+  ];
+}
+
+function getAgentRecommendation(){
+  const gates = getAgentGates();
+  const firstStop = gates.find(g => !g.pass);
+  if(!firstStop) return {title:'안건 초안 생성과 모의검토까지 진행할 수 있습니다', detail:'핵심 입력과 산출물이 모두 준비되었습니다. 최종 안건 초안을 생성하거나 모의 처분 위원회로 리스크를 점검하세요.', action:'최종 안건 생성', fn:'agentNextAction()'};
+  const map = {
+    case:['사건 기본정보를 먼저 채워야 합니다','사건 개요, 과제명, 대상자, 연구개발기관 정보가 있어야 다음 단계 자동화가 안정적으로 작동합니다.','사건접수로 이동'],
+    funding:['단계별 연구개발비 입력이 필요합니다','단계·기관별 정부지원금과 민간부담금이 있어야 환수와 제재부가금 검토의 기초가 분리됩니다.','사건접수로 이동'],
+    interview:['확인 에이전트 인터뷰가 필요합니다','제재대상, 인지시점, 사용내역, 문제금액, 반복성 질문을 채워야 위반행위 요약이 만들어집니다.','사실확인으로 이동'],
+    procedure:['절차확인 상태를 입력해야 합니다','문제 인지, 조사, 정산, 소명, 평가단, 사전통지 등 절차 상태가 안건 품질 게이트에 반영됩니다.','절차확인으로 이동'],
+    discussion:['법률·회계 페르소나 토론이 필요합니다','토론을 통해 제31조·제32조 연결, 금액 분리, 귀책과 절차 리스크를 확인하고 양정기준(안)을 제안합니다.','토론 시작'],
+    proposal:['양정기준(안)을 확정해야 합니다','4단계의 핵심 산출물인 참여제한·환수·제재부가금 검토안을 확정해야 심의안 정리로 이동할 수 있습니다.','양정안 확정'],
+    draft:['심의안건 초안을 생성해야 합니다','확정된 양정기준(안)과 검토 기록을 문서 초안으로 통합할 차례입니다.','안건 생성']
+  };
+  const [title, detail, action] = map[firstStop.key];
+  return {title, detail, action, fn:'agentNextAction()'};
+}
+
+function renderAgentCommandCenter(){
+  const gates = getAgentGates();
+  const rec = getAgentRecommendation();
+  return `
+  <section class="agent-command no-print" aria-label="에이전트 지휘판">
+    <div class="agent-command-inner">
+      <div>
+        <div class="agent-kicker">Support Agent</div>
+        <h2>${esc(rec.title)}</h2>
+        <p>${esc(rec.detail)}</p>
+      </div>
+      <div class="agent-gates">
+        ${gates.map(g=>`<span class="gate-pill ${g.pass?'pass':'stop'}">${g.pass?'✓':'!'} ${esc(g.label)}</span>`).join('')}
+      </div>
+      <div class="agent-command-actions">
+        <button class="btn agent" onclick="${rec.fn}">${esc(rec.action)}</button>
+        <button class="btn small" onclick="loadExampleData()">예시 전체 자동입력</button>
+      </div>
+    </div>
+  </section>`;
+}
+
+function agentNextAction(){
+  const firstStop = getAgentGates().find(g => !g.pass);
+  if(!firstStop){
+    cp.phase = 5;
+    render();
+    return;
+  }
+  if(firstStop.key === 'case' || firstStop.key === 'funding') cp.phase = 0;
+  if(firstStop.key === 'interview') cp.phase = 1;
+  if(firstStop.key === 'procedure') cp.phase = 2;
+  if(firstStop.key === 'discussion') {
+    cp.phase = 3;
+    render();
+    startDiscussion();
+    return;
+  }
+  if(firstStop.key === 'proposal') cp.phase = 3;
+  if(firstStop.key === 'draft') cp.phase = 5;
+  render();
+}
+
+/* ---------- Landing ---------- */
+function renderLanding(){
+  return `
+  <main style="max-width:820px;margin:0 auto;padding:60px 24px;position:relative;z-index:1">
+    <div style="font-size:11px;letter-spacing:2px;color:var(--muted);font-weight:800;text-transform:uppercase">국가연구개발사업</div>
+    <h1 style="font-family:var(--serif);font-size:32px;margin:10px 0 14px;color:var(--navy)">제재처분 안건 작성 지원 에이전트</h1>
+    <p style="font-size:14px;color:var(--ink-2);line-height:1.8;max-width:620px">사건을 설명하면 지원 에이전트가 다음 작업을 안내하고, 사실확인 에이전트와 페르소나들이 단계별 검토를 진행합니다.
+    법률·회계 두 전문가가 서로의 확인 결과를 실시간 참조하며 토론하고, 그 과정과 근거가 모두 기록에 남습니다.
+    4단계에서 양정기준(안)을 제안하고, 사용자는 이를 수정·확정해 심의안건 초안으로 넘길 수 있습니다.</p>
+    ${renderImmediateApplicationExample()}
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:34px 0">
+      <div class="note-card" style="margin:0;border-top:3px solid var(--agent)">
+        <div class="persona-head"><div class="persona-icon agent">✦</div><div><div class="persona-name agent">사실확인 에이전트</div><div class="persona-role">탐색 · 질문 · 사실확인</div></div></div>
+        <p style="margin:8px 0 0;font-size:11.5px;color:var(--ink-2)">사건 개요와 절차 진행상황을 하나씩 확인하며 누락된 사실을 짚어냅니다.</p>
+      </div>
+      <div class="note-card" style="margin:0;border-top:3px solid var(--law)">
+        <div class="persona-head"><div class="persona-icon law">⚖</div><div><div class="persona-name law">변호사</div><div class="persona-role">법적요건 · 판단 · 근거</div></div></div>
+        <p style="margin:8px 0 0;font-size:11.5px;color:var(--ink-2)">부정행위·제재사유 해당 여부, 고의성, 참여제한 논리를 검토합니다.</p>
+      </div>
+      <div class="note-card" style="margin:0;border-top:3px solid var(--money)">
+        <div class="persona-head"><div class="persona-icon money">📊</div><div><div class="persona-name money">회계사</div><div class="persona-role">금액 · 산식 · 수치검토</div></div></div>
+        <p style="margin:8px 0 0;font-size:11.5px;color:var(--ink-2)">문제금액과 환수·제재부가금 산정 기초를 계산 근거와 함께 검토합니다.</p>
+      </div>
+    </div>
+
+    <div class="sys-note" style="text-align:left">⚠ ${esc(LEGAL_NOTICE)}</div>
+
+    <div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;">
+      <span style="font-size:11.5px;font-weight:800;color:var(--navy)">OpenAI API</span>
+      <span class="status-badge ${hasOpenAIApiKey()?'bg-ok':'bg-warn'}" style="font-size:11px;">
+        ${hasOpenAIApiKey()?'● 연결됨 — AI 자동화 사용 가능':'● 미연결 — API 키 연결이 필요합니다'}
+      </span>
+      <button class="btn small" onclick="openOpenAIApiDialog()" style="margin-left:auto">${hasOpenAIApiKey()?'키 변경':'API 연결'}</button>
+      ${hasOpenAIApiKey()?`<button class="btn small" style="color:var(--danger);border-color:var(--danger)" onclick="resetOpenAIApiKey()">연결 해제</button>`:''}
+    </div>
+
+    <button class="btn primary block" style="height:48px;font-size:14px;margin-top:12px" onclick="startCase()">사건 접수 시작하기</button>
+    <button class="btn block" style="height:48px;font-size:14px;margin-top:10px;background:var(--agent-soft);color:var(--agent);border:1px solid var(--agent);" onclick="loadExampleData()">빠른 테스트를 위한 예시 사건 자동 입력</button>
+  </main>`;
+}
+
+function renderImmediateApplicationExample(){
+  return `
+    <div class="note-card" style="margin:24px 0 0;border-left:4px solid var(--navy);background:#fff">
+      <h3>바로 적용 예시 <span class="tag">혁신법 제31조 제1항 · 제32조 제1항 참고</span></h3>
+      <div class="structured-block">
+<h4>예시 쟁점</h4>
+연구책임자가 연구개발비 카드로 과제 수행과 무관한 사적 식사·주류 비용을 결제하고, 사후에 회의비로 처리한 사실이 카드전표·가맹점 업종·참석자 부재·회의록 부존재로 확인된 경우를 예시로 합니다. 이 경우 먼저 해당 사실이 국가연구개발혁신법 제31조제1항의 부정행위 후보에 해당하는지 검토합니다.
+
+<h4>연결 구조</h4>
+① 사실명제 분류: 연구개발비 사용내역, 지출 목적, 증빙, 개인적 이익 여부를 F/C/I/A/U로 표시
+② 제31조제1항 검토: 연구개발비 사용용도 및 사용기준 위반에 해당하는지 확인
+③ 제32조제1항 검토: 제31조제1항 각 호의 어느 하나에 해당하는 부정행위라면 제32조제1항제3호 제재사유 후보로 연결
+④ 처분별 분리: 참여제한, 연구개발비 환수, 제재부가금은 각각 별도 근거·대상·효과·산정 구조로 검토
+
+<h4>주의</h4>
+이 예시는 위반사실이 비교적 명확한 가상 사례입니다. 다만 구체 참여제한 기간·제재부가금 배수는 이 화면에서 확정하지 않습니다. 공식 원문과 사건 증거로 확인되지 않으면 “명확한 근거를 찾을 수 없음”으로 남깁니다.
+      </div>
+    </div>`;
+}
+
+/* 예시 데이터 로드 */
+function loadExampleData() {
+  cp = createCasePacket();
+  cp.original_problem = "【예시 사건】 연구책임자 홍길동(한국과학기술원, 미래원천기술개발사업 RS-2023-0001)은 2023년 8월 12일(토) 22시경 과제와 무관하게 일반유흥주점(가맹점 '향가리')에서 연구개발비 카드로 3,500,000원을 결제하고 사후 회의비로 처리하였다. ① 결제 당일 과제 회의 일정 없음, ② 회의록·참석자 명단 전무, ③ 참석자로 기재된 연구원 2명이 현장 방문 사실 없다고 진술, ④ 가맹점 업종 '유흥주점(일반음식점 외)'으로 확인. 회계점검 결과 동 지출은 혁신법 제13조제3항·제4항 위반으로 정산 불인정 처리되었다. ─ 제31조제1항제2호(연구개발비 사용용도·사용기준 위반) 부정행위 해당성 및 제32조제1항제3호 제재사유를 검토하여 참여제한 2년·환수 3,500,000원·제재부가금 3,500,000원(1배) 처분 안건을 수립한다.";
+  cp.project = {
+    biz_name: "미래원천기술개발사업", project_name: "고효율 에너지 저장 소재 개발", project_number: "RS-2023-0001",
+    lead_institution: "한국과학기술원", partner_institution: "",
+    pi_name: "홍길동", co_pi_name: "",
+    total_period_start: "2023-01-01", total_period_end: "2025-12-31",
+    stage_period_start: "2023-01-01", stage_period_end: "2023-12-31",
+    evaluation_result: "해당없음"
+  };
+  cp.funding.stages.push({
+    id:uid('ST'), stageNo: 1, name:'제1단계', period_start:'2023-01-01', period_end:'2023-12-31', 
+    institutions:[{name:'한국과학기술원', gov_amount: 500000000, private_cash: 50000000, private_inkind: 0}]
+  });
+  cp.funding.stages.push({
+    id:uid('ST'), stageNo: 2, name:'제2단계', period_start:'2024-01-01', period_end:'2024-12-31',
+    institutions:[{name:'한국과학기술원', gov_amount: 520000000, private_cash: 52000000, private_inkind: 0}]
+  });
+  cp.funding.stages.push({
+    id:uid('ST'), stageNo: 3, name:'제3단계', period_start:'2025-01-01', period_end:'2025-12-31',
+    institutions:[{name:'한국과학기술원', gov_amount: 540000000, private_cash: 54000000, private_inkind: 0}]
+  });
+  cp.funding.government_support = 1560000000;
+  cp.funding.private_cash = 156000000;
+  cp.funding.private_in_kind = 0;
+  cp.funding.actual_paid = 1560000000;
+  cp.target = { institution: "한국과학기술원", pi: "홍길동", person: "홍길동", target_type: "개인" };
+  cp.legal_issues = ['m2'];
+  cp.sanction_grounds = ['s3'];
+  cp.predicted_issues = ['제31조제1항제2호 연구개발비 사용기준 위반 후보', '제32조제1항제3호 제재사유 후보', '카드전표·가맹점·회의록 부존재·진술 증거 연결', '기관·개인 귀책 분리', '환수·제재부가금 산정기초 분리'];
+
+  // 위반행위: 구체적 기재 (처분·토의 가능 수준)
+  cp.violation.behavior = "연구책임자 홍길동은 2023년 8월 12일(토) 22시경 과제 수행과 무관하게 일반유흥주점(가맹점 '향가리')에서 연구개발비 카드로 3,500,000원을 결제하고 사후 회의비로 처리하였다. 해당 일자에 과제 회의 일정이 없었고, 회의록·참석자 명단이 전혀 없으며, 참석자로 기재된 연구원 2명은 해당 장소 방문 사실이 없다고 진술하였다. 회계점검 결과 동 지출은 제13조제3항 연구개발비 사용용도 및 제4항 사용기준 위반으로 정산 불인정 처리되었다.";
+  cp.violation.frequency = "초범 (동일 과제 내 동일 유형 위반 최초 확인)";
+
+  // 제재 내용 사전 설정 (명확한 처분 대상)
+  cp.sanctions.recovery.questioned_amount = 3500000;
+  cp.sanctions.recovery.final_amount = 3500000;
+  cp.sanctions.recovery.formula = "정산 불인정액 전액 (3,500,000원)";
+  cp.sanctions.participation_restriction.final = "2년";
+  cp.sanctions.participation_restriction.basis = "혁신법 제32조제1항제3호 및 같은 법 시행령 별표 — 부정행위(연구개발비 사용기준 위반), 초범·위반규모 고려 최소 기간";
+  cp.sanctions.surcharge.applicable = true;
+  cp.sanctions.surcharge.base_amount = 3500000;
+  cp.sanctions.surcharge.final_amount = 3500000;
+  cp.sanctions.surcharge.formula = "위반금액(3,500,000원) × 1배";
+  cp.sanctions.surcharge.basis = "혁신법 제32조제1항 — 부정사용액 1배 적용";
+  cp.sanctions.confirmed_from_chat = true;
+
+  seedExampleInterviewAndProcedure();
+
+  analyzeInitialProblemManual(cp.original_problem);
+  cp.legal_issues = Array.from(new Set([...cp.legal_issues, 'm2']));
+  cp.sanction_grounds = Array.from(new Set([...cp.sanction_grounds, 's3']));
+  cp.predicted_issues = Array.from(new Set([...cp.predicted_issues, '제31조제1항제2호 연구개발비 사용기준 위반 후보', '제32조제1항제3호 제재사유 후보', '카드전표·가맹점·회의록 부존재·진술 증거 연결', '기관·개인 귀책 분리', '환수·제재부가금 산정기초 분리']));
+  cp.phase = 0;
+  render();
+}
+
+function seedExampleInterviewAndProcedure(){
+  cp.interviews = [
+    {id:uid('IV'), key:'target_type', question:'제재 검토 대상은 연구개발기관인가요, 개인(연구자)인가요, 아니면 둘 다인가요?', answer:'우선 연구책임자 개인을 대상으로 검토하되, 기관의 관리·감독 책임은 별도 검토 필요', classification:'예시 입력', timestamp:nowStr()},
+    {id:uid('IV'), key:'detect_date', question:'문제가 된 행위가 최초로 확인(인지)된 시점은 언제인가요?', answer:'2024-02-15 회계점검 과정에서 카드전표와 증빙 불일치 확인', classification:'예시 입력', timestamp:nowStr()},
+    {id:uid('IV'), key:'misuse_detail', question:'연구개발비를 어떤 용도로 사용하였나요? 사용 내역을 알려주세요.', answer:'과제 회의가 없던 휴일 야간에 일반 유흥성 음식점에서 사적 식사·주류 비용으로 결제. 사후 회의비로 처리하였으나 회의록과 참석자 명단이 없음', classification:'예시 입력', timestamp:nowStr()},
+    {id:uid('IV'), key:'amount_rough', question:'불인정 또는 문제 사용금액이 대략 어느 정도로 파악되나요?', answer:'정산 불인정 대상으로 분류된 지출 합계 3,500,000원', classification:'예시 입력', timestamp:nowStr()},
+    {id:uid('IV'), key:'frequency', question:'해당 행위가 반복적으로 발생했나요, 1회성인가요?', answer:'동일 유형의 카드 결제가 5회 확인됨', classification:'예시 입력', timestamp:nowStr()}
+  ];
+  cp.violation.behavior = autoGenerateBehavior();
+  cp.procedure.steps = [
+    {key:'detect', label:'문제 인지', status:'완료', date:'2024-02-15'},
+    {key:'investigate', label:'사실조사', status:'완료', date:'2024-03-05'},
+    {key:'settle', label:'정산', status:'완료', date:'2024-03-20'},
+    {key:'explain', label:'소명', status:'완료', date:'2024-04-02'},
+    {key:'panel', label:'평가단 검토', status:'진행 중', date:'2024-04-25'},
+    {key:'notice', label:'사전통지', status:'미진행', date:''},
+    {key:'opinion', label:'의견제출', status:'미진행', date:''},
+    {key:'reconsider', label:'재검토(이의신청 등)', status:'미진행', date:''}
+  ];
+  addLog('시스템 에이전트','예시 데이터','단계별 연구개발비, 인터뷰 답변, 절차확인 상태를 예시로 입력했습니다.');
+}
+
+/* ---------- Log panel ---------- */
+function renderLog(){
+  const reviewBlock = (cp.discussion.law_review || cp.discussion.acc_review) ? `
+    <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:800;color:var(--navy);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px">
+        ⚖️ 페르소나 검토 요약 · ${cp.discussion.completed_at||''}
+      </div>
+      ${cp.discussion.law_review ? `
+        <div style="margin-bottom:8px">
+          <div style="font-size:10px;font-weight:800;color:var(--law);margin-bottom:3px">법률 페르소나 검토</div>
+          <div style="font-size:11px;color:var(--ink-2);white-space:pre-wrap;line-height:1.5">${esc(cp.discussion.law_review)}</div>
+        </div>` : ''}
+      ${cp.discussion.acc_review ? `
+        <div>
+          <div style="font-size:10px;font-weight:800;color:var(--money);margin-bottom:3px">회계 페르소나 검토</div>
+          <div style="font-size:11px;color:var(--ink-2);white-space:pre-wrap;line-height:1.5">${esc(cp.discussion.acc_review)}</div>
+        </div>` : ''}
+    </div>` : '';
+
+  const logHtml = cp.logs.length === 0
+    ? `<div class="sys-note">아직 기록된 진행 내역이 없습니다.</div>`
+    : `<div aria-live="polite">` + cp.logs.slice().reverse().map(l=>`
+        <div class="log-entry ${actorClass(l.actor)}">
+          <div class="lt">${esc(l.time)} · P${l.phase} · ${esc(l.type)}</div>
+          <div class="la">${actorIcon(l.actor)} ${esc(l.actor)}</div>
+          <div>${nl2br(l.text)}</div>
+        </div>`).join('') + `</div>`;
+
+  return reviewBlock + logHtml;
+}
+
+/* ---------- Center dispatcher ---------- */
+function renderCenter(){
+  switch(cp.phase){
+    case 0: return renderPhase0();
+    case 1: return renderPhase1();
+    case 2: return renderPhase2();
+    case 3: return renderPhase3();
+    case 4: return renderPhase4();
+    case 5: return renderPhase6(); 
+    case 6: return renderPhase7(); 
+    default: return '';
+  }
+}
+function phaseHead(eyebrow,title){
+  return `<div class="panel-title"><div class="eyebrow">${esc(eyebrow)}</div><h2>${esc(title)}</h2></div>`;
+}
+
+/* ============================================================
+   7. PHASE 0 — 사건접수
+   ============================================================ */
+function overviewCoreFilled(){
+  const p = cp.project;
+  const hasFunding = cp.funding.stages.length>0 || cp.funding.yearly.length>0;
+  return !!(p.project_name && p.lead_institution && p.pi_name && p.total_period_start && p.total_period_end && hasFunding);
+}
+function renderPhase0(){
+  const analyzed = !!ui.problemAnalyzed;
+  const showTarget = overviewCoreFilled();
+  return phaseHead('STEP 01 · 사건접수','사건 내용을 알려주세요') + `
+  <div class="panel-inner">
+    <div class="note-card" style="border-top:3px solid var(--agent)">
+      <h3>자연어 기반 일괄 입력 <span class="tag">AI 자동 완성</span></h3>
+      <div class="field">
+        <label>사건 정보 전체를 편하게 적어주세요</label>
+        <span class="example">사업명, 과제명, 기간, 대상자, 위반 내용 등 알고 있는 모든 정보를 줄글로 입력하면 AI가 알아서 아래 빈칸을 채워줍니다.</span>
+        <textarea id="i_problem" class="textarea" style="min-height:130px" placeholder="예: 연구책임자 홍길동이 연구개발비 카드로 과제와 무관한 사적 식사·주류 비용을 결제했고, 회의록·참석자 명단이 없어 연구개발비 사용기준 위반이 문제됩니다.">${esc(cp.original_problem)}</textarea>
+      </div>
+      <div class="actions-row">
+        <button id="btn_analyze" class="btn agent" onclick="analyzeInitialProblemAPI()">
+          <span style="display:flex;align-items:center;">AI 자연어 분석 및 자동 입력</span>
+        </button>
+      </div>
+      ${analyzed?`
+        <div class="agent-card">
+          <div class="persona-head"><div class="persona-icon agent">✦</div><div><div class="persona-name agent">확인 에이전트</div><div class="persona-role">키워드 분석 결과</div></div></div>
+          <div style="margin-top:6px">입력된 문맥을 분석하여 정보 추출을 완료했습니다. 예상 쟁점은 다음과 같습니다:</div>
+          <div style="margin-top:6px">${cp.predicted_issues.map(k=>`<span class="status-badge bg-info" style="margin:2px">${esc(k)}</span>`).join(' ')}</div>
+          ${cp.legal_issues.length>0?`<div style="margin-top:8px;font-size:11px"><b>🔍 예상 부정행위(제31조):</b> ${cp.legal_issues.map(k=>{const m=legalReferences.misconduct.find(x=>x.key===k); return m?`<span class="status-badge bg-warn" style="margin:2px">${esc(m.article)}</span>`:''}).join(' ')}</div>`:''}
+          ${cp.sanction_grounds.length>0?`<div style="margin-top:4px;font-size:11px"><b>🔍 예상 제재사유(제32조):</b> ${cp.sanction_grounds.map(k=>{const s=legalReferences.sanctionGrounds.find(x=>x.key===k); return s?`<span class="status-badge bg-danger" style="margin:2px">${esc(s.article)}</span>`:''}).join(' ')}</div>`:''}
+        </div>`:''}
+    </div>
+
+    ${renderImmediateApplicationExample()}
+
+    <div class="note-card">
+      <h3>사업 개요 <span class="tag">자동 및 수동 입력</span></h3>
+      <div class="form-grid c3">
+        <div class="field"><label>사업명</label><input id="i_bizName" class="input" value="${esc(cp.project.biz_name)}"></div>
+        <div class="field"><label>과제명</label><input id="i_prjName" class="input" value="${esc(cp.project.project_name)}"></div>
+        <div class="field"><label>과제번호</label><input id="i_prjNum" class="input" value="${esc(cp.project.project_number)}"></div>
+      </div>
+      <div class="form-grid" style="margin-top:10px">
+        <div class="field"><label>주관기관</label><input id="i_leadInst" class="input" value="${esc(cp.project.lead_institution)}"></div>
+        <div class="field"><label>공동참여기관</label><input id="i_partInst" class="input" value="${esc(cp.project.partner_institution)}"></div>
+        <div class="field"><label>연구책임자</label><input id="i_piName" class="input" value="${esc(cp.project.pi_name)}"></div>
+        <div class="field"><label>공동기관 연구책임자</label><input id="i_coPiName" class="input" value="${esc(cp.project.co_pi_name)}"></div>
+      </div>
+      <div class="form-grid" style="margin-top:10px">
+        <div class="field"><label>총 사업기간 · 시작일</label><input type="date" id="i_totalStart" class="input" value="${esc(cp.project.total_period_start)}"></div>
+        <div class="field"><label>총 사업기간 · 종료일</label><input type="date" id="i_totalEnd" class="input" value="${esc(cp.project.total_period_end)}"></div>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>단계별 · 기관별 연구비</label>
+        ${renderStagesUI()}
+        <div class="actions-row"><button class="btn primary small" onclick="addStage()">+ 단계 추가</button></div>
+      </div>
+    </div>
+
+    ${showTarget?`
+    <div class="note-card" style="border-top:3px solid var(--amber)">
+      <h3>추가입력 — 제재처분 대상 <span class="tag">자동 및 수동 입력</span></h3>
+      <div class="form-grid c3">
+        <div class="field"><label>처분 대상기관</label><input id="i_targetInst" class="input" value="${esc(cp.target.institution)}"></div>
+        <div class="field"><label>대상기관 연구책임자</label><input id="i_targetPi" class="input" value="${esc(cp.target.pi)}"></div>
+        <div class="field"><label>처분 대상자</label><input id="i_targetPerson" class="input" value="${esc(cp.target.person)}"></div>
+      </div>
+    </div>`:`<div class="sys-note">입력된 정보를 바탕으로 시스템이 분석하면 추가 대상 입력란이 열립니다.</div>`}
+
+    <div class="actions-row">
+      <button class="btn primary block" style="height:44px;font-size:13.5px" onclick="goToPhase1()">정보 저장 · 사실확인 인터뷰로 이동</button>
+    </div>
+  </div>`;
+}
+
+async function analyzeInitialProblemAPI() {
+  const text = val('i_problem') || '';
+  if(!text.trim()){ alert('먼저 사건 개요를 자연어로 입력해주세요.'); return; }
+  cp.original_problem = text;
+
+  const btn = document.getElementById('btn_analyze');
+  if(btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner dark"></span> AI가 내용을 추출하여 양식을 채우고 있습니다...'; }
+
+  const prompt = `
+  너는 국가연구개발사업 제재처분 정보를 추출하는 AI야. 
+  사용자가 입력한 사건 설명을 바탕으로 아래 JSON 포맷에 맞게 데이터를 추출해줘.
+  없는 정보는 빈 문자열("")로 둬.
+  반드시 마크다운 없이 순수 JSON 텍스트만 출력해.
+
+  [입력 내용]
+  ${text}
+
+  [JSON 포맷]
+  {
+    "biz_name": "사업명",
+    "project_name": "과제명",
+    "project_number": "과제번호",
+    "lead_institution": "주관기관",
+    "partner_institution": "공동참여기관",
+    "pi_name": "연구책임자",
+    "co_pi_name": "공동기관 연구책임자",
+    "total_period_start": "YYYY-MM-DD 형식 (예: 2023-01-01)",
+    "total_period_end": "YYYY-MM-DD 형식 (예: 2025-12-31)",
+    "target_institution": "처분 대상기관",
+    "target_pi": "대상기관 연구책임자",
+    "target_person": "처분 대상자",
+    "predicted_issues": ["예상되는 쟁점 1", "쟁점 2"],
+    "legal_issues": ["m1", "m2", "m3", "m4", "m5", "m6 중 해당 코드"],
+    "sanction_grounds": ["s1", "s2", "s3", "s4", "s5", "s6 중 해당 코드"],
+    "questioned_amount": "금액이 있다면 숫자만 (예: 3500000)"
+  }`;
+
+  try {
+    const res = await getOpenAIResponse(prompt);
+    const data = safeParseJSON(res);
+
+    if(data.biz_name) cp.project.biz_name = data.biz_name;
+    if(data.project_name) cp.project.project_name = data.project_name;
+    if(data.project_number) cp.project.project_number = data.project_number;
+    if(data.lead_institution) cp.project.lead_institution = data.lead_institution;
+    if(data.partner_institution) cp.project.partner_institution = data.partner_institution;
+    if(data.pi_name) cp.project.pi_name = data.pi_name;
+    if(data.co_pi_name) cp.project.co_pi_name = data.co_pi_name;
+    if(data.total_period_start) cp.project.total_period_start = data.total_period_start;
+    if(data.total_period_end) cp.project.total_period_end = data.total_period_end;
+    
+    if(data.target_institution) cp.target.institution = data.target_institution;
+    if(data.target_pi) cp.target.pi = data.target_pi;
+    if(data.target_person) cp.target.person = data.target_person;
+    
+    if(data.predicted_issues) cp.predicted_issues = data.predicted_issues;
+    if(data.legal_issues) cp.legal_issues = data.legal_issues;
+    if(data.sanction_grounds) cp.sanction_grounds = data.sanction_grounds;
+
+    if(data.questioned_amount) cp.sanctions.recovery.questioned_amount = Number(data.questioned_amount);
+
+    ui.problemAnalyzed = true;
+    addLog('시스템 에이전트','자동분석',`AI 자연어 분석 완료. 쟁점: ${cp.predicted_issues.join(', ')}`);
+  } catch(e) {
+    console.warn("JSON 파싱 에러 또는 API 에러, 수동 분석으로 대체", e);
+    analyzeInitialProblemManual(text); 
+  }
+  
+  if(btn) { btn.disabled = false; btn.innerHTML = 'AI 자연어 분석 및 자동 입력'; }
+  render();
+}
+
+function analyzeInitialProblemManual(textParam){
+  const text = textParam || val('i_problem') || '';
+  if(!text.trim()) return;
+  cp.original_problem = text;
+
+  const kws=[];
+  if(/목적\s*외|유흥|사적|사용\s*기준|용도/.test(text)) kws.push('연구개발비 사용기준 위반 가능성');
+  if(/위조|변조|표절|저자/.test(text)) kws.push('자료·성과 위조·변조·표절 가능성');
+  if(kws.length===0) kws.push('제재대상자 특정 및 제재사유 추가 확인 필요');
+  cp.predicted_issues = kws;
+
+  const detectedMisconduct=[];
+  if(/위조|변조|표절/.test(text)) detectedMisconduct.push('m1');
+  if(/목적\s*외|유흥|사적/.test(text)) detectedMisconduct.push('m2');
+  cp.legal_issues = detectedMisconduct;
+
+  const detectedGrounds=[];
+  if(detectedMisconduct.length>0) detectedGrounds.push('s3');
+  cp.sanction_grounds = detectedGrounds;
+
+  ui.problemAnalyzed = true;
+  addLog('시스템 에이전트','사건분석',`기본 분석 완료. 예상 쟁점: ${kws.join('/')}`);
+}
+
+function renderStagesUI(){
+  const stages = cp.funding.stages;
+  if(stages.length===0) return `<div class="sys-note" style="margin-top:6px">단계가 없습니다. "+ 단계 추가" 버튼을 누르세요.</div>`;
+  return stages.map((st,si)=>`
+    <div style="border:1px solid var(--line-strong);border-radius:8px;padding:10px 12px;margin-top:8px;background:#fff">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+        <b style="font-size:12px">${esc(st.name)}</b>
+        <div class="field" style="flex:0 0 150px;margin:0">
+          <label style="margin-bottom:2px;font-size:10px">단계 시작일</label>
+          <input type="date" class="input" id="st_${si}_start" value="${esc(st.period_start)}">
+        </div>
+        <div class="field" style="flex:0 0 150px;margin:0">
+          <label style="margin-bottom:2px;font-size:10px">단계 종료일</label>
+          <input type="date" class="input" id="st_${si}_end" value="${esc(st.period_end)}">
+        </div>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <thead><tr style="background:var(--paper-2)">
+          <th style="padding:5px 8px;border:1px solid var(--line);text-align:left">기관명</th>
+          <th style="padding:5px 8px;border:1px solid var(--line)">정부지원금(원)</th>
+          <th style="padding:5px 8px;border:1px solid var(--line)">민간현금(원)</th>
+          <th style="padding:5px 8px;border:1px solid var(--line)">삭제</th>
+        </tr></thead>
+        <tbody>
+          ${st.institutions.map((inst,ii)=>`<tr>
+            <td style="padding:4px 6px;border:1px solid var(--line)"><input class="input" style="min-height:28px" id="st_${si}_inst_${ii}_name" value="${esc(inst.name)}"></td>
+            <td style="padding:4px 6px;border:1px solid var(--line)"><input type="number" class="input" style="min-height:28px" id="st_${si}_inst_${ii}_gov" value="${inst.gov_amount!=null?inst.gov_amount:''}"></td>
+            <td style="padding:4px 6px;border:1px solid var(--line)"><input type="number" class="input" style="min-height:28px" id="st_${si}_inst_${ii}_cash" value="${inst.private_cash!=null?inst.private_cash:''}"></td>
+            <td style="padding:4px 6px;border:1px solid var(--line);text-align:center"><span style="color:var(--danger);cursor:pointer;font-weight:800" onclick="saveOverviewFields();cp.funding.stages[${si}].institutions.splice(${ii},1);render()">×</span></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <div style="margin-top:6px;"><button class="btn small" onclick="saveOverviewFields(true);cp.funding.stages[${si}].institutions.push({name:'', gov_amount:null, private_cash:null, private_inkind:null});render()">+ 기관 추가</button></div>
+    </div>`).join('');
+}
+
+function addStage(){
+  saveOverviewFields();
+  const stageNo = (cp.funding.stages.length+1);
+  cp.funding.stages.push({id:uid('ST'), stageNo, name:`제${stageNo}단계`, period_start:'', period_end:'', institutions:[]});
+  render();
+}
+function saveOverviewFields(skipRender){
+  cp.project.biz_name = val('i_bizName')||cp.project.biz_name;
+  cp.project.project_name = val('i_prjName')||cp.project.project_name;
+  cp.project.project_number = val('i_prjNum')||cp.project.project_number;
+  cp.project.lead_institution = val('i_leadInst')||cp.project.lead_institution;
+  cp.project.partner_institution = val('i_partInst')||cp.project.partner_institution;
+  cp.project.pi_name = val('i_piName')||cp.project.pi_name;
+  cp.project.co_pi_name = val('i_coPiName')||cp.project.co_pi_name;
+  cp.project.total_period_start = val('i_totalStart')||cp.project.total_period_start;
+  cp.project.total_period_end = val('i_totalEnd')||cp.project.total_period_end;
+  if(document.getElementById('i_targetInst')) cp.target.institution = val('i_targetInst');
+  if(document.getElementById('i_targetPi')) cp.target.pi = val('i_targetPi');
+  if(document.getElementById('i_targetPerson')) cp.target.person = val('i_targetPerson');
+  cp.funding.stages.forEach((st,si)=>{
+    const ps = val(`st_${si}_start`);
+    const pe = val(`st_${si}_end`);
+    if(ps!==undefined) st.period_start = ps;
+    if(pe!==undefined) st.period_end = pe;
+  });
+  cp.funding.stages.forEach((st,si)=>{
+    st.institutions.forEach((inst,ii)=>{
+      const n=val(`st_${si}_inst_${ii}_name`), g=val(`st_${si}_inst_${ii}_gov`), c=val(`st_${si}_inst_${ii}_cash`);
+      if(n!==undefined) inst.name=n;
+      if(g!==undefined && g!=='') inst.gov_amount=Number(g);
+      if(c!==undefined && c!=='') inst.private_cash=Number(c);
+    });
+  });
+  if(!skipRender) render();
+}
+function goToPhase1(){
+  saveOverviewFields();
+  cp.phase = 1;
+  addLog('사용자','단계전환','사업 개요 입력을 완료하고 사실확인 인터뷰로 이동했습니다.');
+  ui.interviewQs = null; 
+  render();
+}
+
+/* ============================================================
+   8. PHASE 1 — 사실확인 인터뷰
+   ============================================================ */
+function autoGenerateBehavior() {
+  const detect = cp.interviews.find(i=>i.key==='detect_date');
+  const facts = cp.interviews.map(i => {
+    let label = i.question;
+    if(i.key==='detect_date') label = '최초 확인 시점';
+    if(i.key==='target_type') label = '제재대상 구분';
+    if(i.key==='amount_rough') label = '문제금액 규모';
+    return {label, answer:i.answer};
+  });
+  const lines = [];
+  lines.push('[안건식 정리]');
+  lines.push(`1. 사건 접수 개요: ${cp.original_problem || '사용자 입력 필요'}`);
+  if(detect?.answer) lines.push(`2. 최초 문제 행위 확인 시점: ${detect.answer}`);
+  lines.push('3. 인터뷰를 통해 정리된 사실관계:');
+  facts.forEach((f, idx) => {
+    lines.push(`   ${idx+1}) ${f.label}: ${f.answer}`);
+  });
+  lines.push('');
+  lines.push('[정리된 쟁점]');
+  lines.push('- 제재사유 해당성');
+  lines.push('- 문제금액 및 환수 범위');
+  lines.push('- 참여제한 및 제재부가금 산정 기준');
+  return lines.join('\n');
+}
+
+function renderPhase1(){
+  if(!ui.interviewQs) ui.interviewQs = buildInterviewQuestions();
+  const qs = ui.interviewQs;
+  const done = cp.interviews.length;
+  const dots = qs.map((_,i)=>`<span class="${i<done?'on':''}"></span>`).join('');
+  let body;
+  
+  if(done>=qs.length){
+    if(!cp.violation.behavior) cp.violation.behavior = autoGenerateBehavior();
+
+    body = `
+    <div class="agent-card">
+      <div class="persona-head"><div class="persona-icon agent">✦</div><div><div class="persona-name agent">확인 에이전트</div><div class="persona-role">인터뷰 종료</div></div></div>
+      <div style="margin-top:6px">핵심 사실 확인 인터뷰를 마쳤습니다. 수집된 정보를 바탕으로 위반행위 요약을 종합했습니다.</div>
+    </div>
+    <div class="note-card" style="border-top:3px solid var(--agent)">
+      <h3>확인 에이전트 기본 인터뷰 <span class="tag">예시 답변 입력됨</span></h3>
+      <div class="progress-dots">${dots}</div>
+      <div class="structured-block" style="background:#fbfcfd">
+${cp.interviews.map((iv, idx)=>`${idx+1}. ${iv.question}
+   답변: ${iv.answer}
+   분류: ${iv.classification || '사용자 진술'}`).join('\n\n')}
+      </div>
+      <div class="actions-row">
+        <button class="btn agent" onclick="restartInterview()">인터뷰 다시 진행</button>
+        <button class="btn" onclick="openInterviewEditor()">예시 답변 수정</button>
+      </div>
+      ${ui.editInterview ? renderInterviewEditor() : ''}
+    </div>
+    <div class="note-card">
+      <h3>종합 위반행위 요약 (시스템 자동 생성)</h3>
+      <div style="background:var(--paper-2); padding:12px; border-radius:6px; font-size:11.5px; white-space:pre-wrap; line-height:1.6; border:1px solid var(--line-strong);">${esc(cp.violation.behavior)}</div>
+      
+      <div class="field" style="margin-top:14px; border-top:1px dashed var(--line); padding-top:10px;">
+        <label>추가 의견 제시 (선택)</label>
+        <span class="example">요약된 내용 중 수정이 필요하거나 추가로 알리고 싶은 사실이 있다면 적어주세요.</span>
+        <textarea id="i_behavior_add" class="textarea" style="min-height:60px" placeholder="추가 의견을 입력하세요..."></textarea>
+      </div>
+      <div class="actions-row"><button class="btn small" onclick="saveBehaviorAdd()">추가 의견 반영</button></div>
+    </div>
+    <div class="actions-row">
+      <button class="btn" onclick="cp.phase=0;render()">← 이전 단계</button>
+      <button class="btn primary" onclick="cp.phase=2;render()">절차확인으로 이동 →</button>
+    </div>`;
+  } else {
+    const q = qs[done];
+    body = `
+    <div class="topic-banner"><div><b>인터뷰 진행 중</b> <span class="sub">질문 ${done+1} / ${qs.length}</span></div></div>
+    <div class="progress-dots">${dots}</div>
+    <div class="agent-card">
+      <div class="persona-head"><div class="persona-icon agent">✦</div><div><div class="persona-name agent">확인 에이전트</div><div class="persona-role">사실확인 인터뷰</div></div></div>
+      <div style="margin-top:8px;font-size:13px;font-weight:700">${esc(q.q)}</div>
+    </div>
+    <div class="note-card">
+      <div class="field">
+        <label>답변</label>
+        ${q.key==='detect_date'
+          ? `<input type="date" id="i_ivAnswer" class="input" value="${esc(todayISO())}">`
+          : `<textarea id="i_ivAnswer" class="textarea" placeholder="답변을 입력하세요..."></textarea>`}
+      </div>
+      <div class="actions-row"><button class="btn agent" onclick="answerInterview('${q.key}')">답변 제출</button></div>
+    </div>
+    <div class="actions-row"><button class="btn" onclick="cp.phase=0;render()">← 이전 단계</button></div>`;
+  }
+  return phaseHead('STEP 02 · 사실확인','✦ 사실확인 에이전트와 인터뷰') + `<div class="panel-inner">${body}</div>`;
+}
+
+function renderInterviewEditor(){
+  return `
+    <div style="margin-top:12px;border-top:1px dashed var(--line);padding-top:12px">
+      ${cp.interviews.map((iv, idx)=>`
+        <div class="review-item">
+          <div style="font-weight:800;font-size:11.5px;margin-bottom:6px">${idx+1}. ${esc(iv.question)}</div>
+          <textarea id="edit_iv_${idx}" class="textarea" style="min-height:58px">${esc(iv.answer)}</textarea>
+        </div>`).join('')}
+      <div class="actions-row">
+        <button class="btn primary" onclick="saveInterviewEdits()">수정 내용 저장</button>
+        <button class="btn" onclick="ui.editInterview=false;render()">닫기</button>
+      </div>
+    </div>`;
+}
+
+function openInterviewEditor(){
+  ui.editInterview = true;
+  render();
+}
+
+function saveInterviewEdits(){
+  cp.interviews.forEach((iv, idx)=>{
+    const edited = val(`edit_iv_${idx}`);
+    if(edited !== undefined) iv.answer = edited || '확인되지 않음';
+  });
+  cp.violation.behavior = autoGenerateBehavior();
+  ui.editInterview = false;
+  addLog('사용자','인터뷰수정','확인 에이전트 인터뷰 답변을 수정했습니다.');
+  render();
+}
+
+function restartInterview(){
+  if(!confirm('기존 인터뷰 답변을 지우고 2단계 확인 에이전트 인터뷰를 처음부터 다시 진행할까요?')) return;
+  cp.interviews = [];
+  cp.violation.behavior = '';
+  ui.interviewQs = buildInterviewQuestions();
+  ui.editInterview = false;
+  addLog('사용자','인터뷰재시작','확인 에이전트 기본 인터뷰를 다시 시작했습니다.');
+  render();
+}
+
+function answerInterview(key){
+  const qs = ui.interviewQs;
+  const q = qs[cp.interviews.length];
+  const answer = val('i_ivAnswer') || '확인되지 않음';
+  cp.interviews.push({id:uid('IV'), key:q.key, question:q.q, answer, classification:'사용자 진술', timestamp:nowStr()});
+  addLog('사용자','인터뷰응답',`[${q.q}] → ${answer}`);
+  if(key==='amount_rough'){ 
+    const n=parseInt(answer.replace(/[^0-9]/g,'')); 
+    if(!isNaN(n)) cp.sanctions.recovery.questioned_amount = n; 
+  }
+  render();
+}
+function saveBehaviorAdd() {
+    const addText = val('i_behavior_add');
+    if(addText) {
+        cp.violation.behavior = `${autoGenerateBehavior()}\n\n[사용자 추가 의견 반영]\n- ${addText}`;
+        addLog('사용자', '위반행위 추가의견', '추가 의견을 반영했습니다.');
+        render();
+    }
+}
+
+function todayISO(){
+  return new Date().toISOString().slice(0,10);
+}
+
+/* ============================================================
+   9. PHASE 2 — 절차확인
+   ============================================================ */
+function renderPhase2(){
+  const steps = cp.procedure.steps;
+  return phaseHead('STEP 03 · 절차확인','현재 절차가 어디까지 진행되었나요?') + `
+  <div class="panel-inner">
+    <div class="note-card">
+      <h3>절차 타임라인</h3>
+      ${steps.map((s,i)=>`
+        <div class="review-item" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <div style="flex:1 1 160px;font-weight:700;font-size:12px">${i+1}. ${esc(s.label)}</div>
+          <select id="ps_${s.key}_status" class="select" style="flex:0 0 150px">
+            ${['완료','진행 중','미진행','확인되지 않음'].map(o=>`<option value="${o}" ${s.status===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+          <input type="date" id="ps_${s.key}_date" class="input" style="flex:0 0 160px" value="${esc(s.date)}">
+        </div>`).join('')}
+    </div>
+    <div class="actions-row">
+      <button class="btn" onclick="cp.phase=1;render()">← 이전 단계</button>
+      <button class="btn primary" onclick="goToPhase3()">법률·회계 종합토론으로 이동 →</button>
+    </div>
+  </div>`;
+}
+function goToPhase3(){
+  cp.procedure.steps.forEach(s=>{
+    s.status = val(`ps_${s.key}_status`)||s.status;
+    s.date = val(`ps_${s.key}_date`)||s.date;
+  });
+  cp.phase = 3;
+  addLog('사용자','단계전환','절차확인을 마치고 종합토론으로 이동했습니다.');
+  render();
+}
+
+/* ============================================================
+   10. PHASE 3 — 법률·회계 종합 토론 (사용자 양정안 직접 확정 방식)
+   ============================================================ */
+function buildSystemAgentOpening(){
+  const behavior = cp.violation.behavior || autoGenerateBehavior();
+  const grounds = cp.sanction_grounds
+    .map(k => legalReferences.sanctionGrounds.find(x => x.key === k))
+    .filter(Boolean)
+    .map(x => x.article)
+    .join(', ') || '제32조제1항 해당 여부 검토 필요';
+  const misconduct = cp.legal_issues
+    .map(k => legalReferences.misconduct.find(x => x.key === k))
+    .filter(Boolean)
+    .map(x => x.article)
+    .join(', ') || '제31조제1항 해당 여부 검토 필요';
+  return `시스템 에이전트 초기 분석: 입력된 사건은 ${misconduct} 부정행위 후보와 ${grounds} 제재사유 후보의 연결 여부를 검토하는 사안입니다. 핵심은 사실·증거·법적 근거 연결, 기관/개인 귀책 분리, 환수·제재부가금 산정기초 분리입니다. 이하 토론은 법률 페르소나와 회계 페르소나가 각각 다른 관점에서 진행합니다.`;
+}
+
+function buildDiscussionPrompt(){
+  const behavior = cp.violation.behavior || autoGenerateBehavior();
+  const dateHint = (cp.interviews.find(i=>i.key==='detect_date')||{}).answer || '미입력';
+  const qNum = cp.sanctions.recovery.questioned_amount || 3500000;
+  const summary = [
+    `[사건 개요]`,
+    `- 최초 확인 시점: ${dateHint}`,
+    `- 문제금액: ${fmtWon(qNum)}`,
+    `- 위반행위 요약: ${behavior}`,
+    ``,
+    `[페르소나 구조]`,
+    `- 시스템 에이전트는 초반 설명을 이미 1회 제공했으므로, 출력하지 않는다.`,
+    `- 법률 페르소나는 법률요건, 제재사유, 참여제한 상당성, 기관/개인 귀책 분리를 검토한다.`,
+    `- 회계 페르소나는 환수금, 제재부가금, 산식과 금액 개념 분리의 타당성을 검토한다.`,
+    `- 두 페르소나는 서로 다른 성격과 관점을 유지하면서 반박·보완한다.`,
+    ``,
+    `[근거 제약]`,
+    `- 확인 가능한 근거가 없는 내용은 단정하지 말고 "명확한 근거를 찾을 수 없음"이라고 쓴다.`,
+    `- 법령·판례·기간·금액·배수·사례를 만들어내지 않는다.`,
+    `- 최종 표현은 양정기준(안), 검토안, 심의안건 초안으로 제한한다.`,
+    ``,
+    `[출력 형식 — 반드시 준수]`,
+    `- 모든 발언은 반드시 "법률 페르소나: " 또는 "회계 페르소나: "로 시작하는 줄로만 구성한다.`,
+    `- **, ##, 숫자+점, 마크다운 헤더, 취소선 등 모든 마크다운 서식을 절대 사용하지 않는다.`,
+    `- 말줄임표(...)나 자리표시자만 있는 줄은 출력하지 않는다.`,
+    `- 반드시 법률 페르소나 발언이 최소 2줄, 회계 페르소나 발언이 최소 2줄 포함되어야 한다.`,
+    `- 법률 페르소나와 회계 페르소나가 번갈아 가며 발언하는 대화 형태로 작성한다.`,
+    `- 전체 4~8줄로 작성한다.`,
+    `- 맨 마지막 줄은 반드시 회계 페르소나 발언이어야 하며, 그 줄 끝(줄 바꿈 없이 같은 줄)에 제안 태그를 이어붙인다.`,
+    `- 태그 형식: [제안|참여제한:내용_또는_명확한_근거를_찾을_수_없음|환수금액:내용_또는_명확한_근거를_찾을_수_없음|제재부가금:내용_또는_명확한_근거를_찾을_수_없음|근거:한줄요약]`
+  ].join('\n');
+
+  return `너는 국가연구개발사업 제재처분을 검토하는 별개의 AI 페르소나 두 명이다.\n${summary}\n\n반드시 위 형식만 사용해서 토론과 제안 태그를 작성해. 빈 대사나 말줄임표만 있는 대사는 금지한다. 법률 페르소나와 회계 페르소나 둘 다 반드시 발언해야 한다.`;
+}
+
+function buildInitialDiscussionFallback(){
+  const qNum = cp.sanctions.recovery.questioned_amount || 3500000;
+  return [
+    {speaker:'sys', text:buildSystemAgentOpening()},
+    {speaker:'lawyer', text:`법률 페르소나 검토: 본 건은 연구개발비 사용의 적정성과 제31조제1항 부정행위 후보 해당 여부가 쟁점입니다. 구체 처분근거는 공식 원문으로 재확인해야 합니다.`},
+    {speaker:'accountant', text:`회계 페르소나 검토: 문제금액은 우선 ${fmtWon(qNum)}으로 입력되어 있으나, 정산 불인정액·위반액·환수액·제재부가금 산정기초는 분리해야 합니다. [제안|참여제한:명확한 근거를 찾을 수 없음|환수금액:${qNum}원|제재부가금:명확한 근거를 찾을 수 없음|근거:환수 검토액 외 기간·배수는 공식 근거 재확인 필요]` }
+  ];
+}
+
+async function buildDiscussionScript(){
+  const prompt = buildDiscussionPrompt();
+  try{
+    const responseText = await getOpenAIResponse(prompt);
+    const msgs = parseDiscussionLines(responseText);
+    if(!msgs.length) return buildInitialDiscussionFallback();
+    const normalized = normalizeDiscussionScript(msgs);
+    if(normalized.filter(m => m.speaker === 'lawyer' || m.speaker === 'accountant').length < 2) return buildInitialDiscussionFallback();
+    return normalized;
+  }catch(err){
+    console.error(err);
+    return buildInitialDiscussionFallback();
+  }
+}
+
+function normalizeDiscussionScript(msgs){
+  // 1) sys 행에 고아 [제안] 태그가 있으면 마지막 페르소나로 이동
+  const cleaned = _attachOrphanProposalTags(msgs);
+  // 2) 페르소나 발언만 남김
+  const personaMsgs = cleaned.filter(m => {
+    if(m.speaker === 'usr') return true;
+    if(m.speaker === 'lawyer' || m.speaker === 'accountant') return isMeaningfulPersonaText(m.text);
+    return false;
+  });
+  return [{speaker:'sys', text:buildSystemAgentOpening()}, ...personaMsgs];
+}
+
+function getProposalHistory(){
+  if(!cp.discussion) cp.discussion = {law_review:'', acc_review:'', completed_at:'', proposal_history:[]};
+  if(!Array.isArray(cp.discussion.proposal_history)) cp.discussion.proposal_history = [];
+  return cp.discussion.proposal_history;
+}
+
+function parseProposalFromText(text){
+  const regex = /\[제안\s*\|\s*참여제한\s*:\s*([\s\S]*?)\s*\|\s*환수금액\s*:\s*([\s\S]*?)\s*\|\s*제재부가금\s*:\s*([\s\S]*?)\s*\|\s*근거\s*:\s*([\s\S]*?)\]/;
+  const match = String(text || '').match(regex);
+  if(!match) return null;
+  return {participation:match[1].trim(), recovery:match[2].trim(), surcharge:match[3].trim(), basis:match[4].trim()};
+}
+
+function proposalSignature(p){
+  return [p.participation,p.recovery,p.surcharge,p.basis].map(v=>String(v||'').trim()).join('|');
+}
+
+function summarizeProposalReview(messages, speaker){
+  const label = speaker === 'lawyer' ? '법률 검토 없음' : speaker === 'accountant' ? '회계 검토 없음' : '사용자 의견 없음';
+  const text = (messages || [])
+    .filter(m => m.speaker === speaker)
+    .map(m => String(m.text || '').replace(/\[제안[\s\S]*?\]/g,'').replace(/^(법률|회계)\s*페르소나\s*[:：]\s*/,'').trim())
+    .filter(Boolean)
+    .join(' / ');
+  if(!text) return label;
+  return text.length > 320 ? text.slice(0,317) + '…' : text;
+}
+
+function recordProposalVersion(messages, userText='', options={}){
+  const proposal = (messages || []).map(m => parseProposalFromText(m.text)).filter(Boolean).pop();
+  if(!proposal) return null;
+  const history = getProposalHistory();
+  const forceNew = !!options.forceNew;
+  const existing = history.find(item => proposalSignature(item) === proposalSignature(proposal));
+  if(existing && !forceNew) {
+    if(userText && !String(existing.user_summary || '').includes(userText)) {
+      const prior = !existing.user_summary || existing.user_summary === '사용자 의견 없음' ? '' : existing.user_summary + ' / ';
+      existing.user_summary = (prior + userText).slice(0,320);
+    }
+    return existing;
+  }
+  const version = {
+    id:uid('PROP'), version:history.length+1, ...proposal,
+    law_summary:summarizeProposalReview(messages,'lawyer'),
+    acc_summary:summarizeProposalReview(messages,'accountant'),
+    user_summary:userText || summarizeProposalReview(messages,'usr'),
+    status:'proposed', created_at:nowStr(), confirmed_at:'',
+    request_type:forceNew?'additional':'standard'
+  };
+  history.forEach(item => { if(item.status === 'proposed') item.status = 'superseded'; });
+  history.push(version);
+  ui.proposalViewIndex=history.length-1;
+  addLog('시스템 에이전트','양정안 제안',`${version.version}안 생성 — 참여제한 ${version.participation}, 환수 ${version.recovery}, 제재부가금 ${version.surcharge}`);
+  return version;
+}
+
+function syncProposalHistoryFromChat(){
+  let contextStart = 0;
+  let latestUserText = '';
+  ui.discScript.forEach((message,index) => {
+    if(message.speaker === 'usr') {
+      contextStart = index;
+      latestUserText = String(message.text || '').trim();
+    }
+    if(parseProposalFromText(message.text)) {
+      recordProposalVersion(ui.discScript.slice(contextStart,index+1), latestUserText);
+    }
+  });
+  return getProposalHistory();
+}
+
+function ensureProposalHistoryFromDiscussion(){
+  syncProposalHistoryFromChat();
+  const history = getProposalHistory();
+  if(history.length) return history;
+  const meaningful = ui.discScript.filter(m =>
+    (m.speaker === 'lawyer' || m.speaker === 'accountant') && !m.streaming && isMeaningfulPersonaText(m.text)
+  );
+  if(!meaningful.length) return history;
+
+  // 모델이 제안 태그를 누락하거나 변형해도 토론 결과를 1안으로 보존한다.
+  const fallback = extractLatestProposal();
+  history.push({
+    id:uid('PROP'), version:1,
+    participation:fallback.participation,
+    recovery:fallback.recovery,
+    surcharge:fallback.surcharge,
+    basis:fallback.basis,
+    law_summary:summarizeProposalReview(ui.discScript,'lawyer'),
+    acc_summary:summarizeProposalReview(ui.discScript,'accountant'),
+    user_summary:summarizeProposalReview(ui.discScript,'usr'),
+    status:'proposed', created_at:nowStr(), confirmed_at:''
+  });
+  addLog('시스템 에이전트','양정안 복구','토론 내용을 기준으로 최초 양정안 이력을 복구했습니다.');
+  return history;
+}
+
+function renderProposalHistoryPanelLegacy(){
+  const history = getProposalHistory();
+  if(!history.length) return `<section class="proposal-history" aria-label="양정기준안 변경 이력">
+    <div class="proposal-history-head">
+      <div><div class="proposal-history-title">📌 양정기준(안) 이력</div><div style="font-size:9.5px;color:var(--muted);margin-top:1px">최초 제안이 생성되면 1안부터 기록됩니다.</div></div>
+      <span class="status-badge bg-hold">제안 대기 중</span>
+    </div>
+  </section>`;
+  const confirmed = history.findLast ? history.findLast(p=>p.status==='confirmed') : history.filter(p=>p.status==='confirmed').pop();
+  const current = confirmed || history[history.length-1];
+  const currentIndex = history.indexOf(current);
+  const flow = history.map((p,i)=>{
+    const cls = p.status === 'confirmed' ? 'confirmed' : i === history.length-1 ? 'current' : '';
+    return `${i?'<span class="proposal-arrow">→</span>':''}<span class="proposal-step ${cls}">${p.status==='confirmed'?'✓ ':''}${p.version}안</span>`;
+  }).join('') + (confirmed ? '<span class="proposal-arrow">→</span><span class="proposal-step confirmed">✓ 확정</span>' : '<span class="proposal-arrow">→</span><span class="proposal-step current">검토 중</span>');
+
+  const versions = [...history].reverse().map((p,reverseIndex)=>{
+    return `<div class="proposal-version-body" style="margin-bottom:${reverseIndex===history.length-1?'0':'8px'};border:1px solid var(--line);border-radius:7px;background:#fff">
+        <div class="proposal-version-label"><span>${p.version}안 ${p.status==='confirmed'?'<span class="status-badge bg-ok">확정</span>':'<span class="status-badge bg-info">검토안</span>'}</span><span style="font-size:9px;color:var(--muted);font-weight:600">${esc(p.created_at)}</span></div>
+        <div class="proposal-current-grid">
+          <div class="proposal-current-item"><span>참여제한</span><b>${esc(p.participation)}</b></div>
+          <div class="proposal-current-item"><span>환수금액</span><b>${esc(p.recovery)}</b></div>
+          <div class="proposal-current-item"><span>제재부가금</span><b>${esc(p.surcharge)}</b></div>
+        </div>
+        <div class="proposal-review law"><b>⚖ 변호사(법률 페르소나) 검토 핵심</b><br>${esc(p.law_summary)}</div>
+        <div class="proposal-review acc"><b>📊 회계사(회계 페르소나) 검토 핵심</b><br>${esc(p.acc_summary)}</div>
+        <div class="proposal-review user"><b>👤 사용자 검토 핵심</b><br>${esc(p.user_summary)}</div>
+        <div class="proposal-review"><b>제안 근거</b><br>${esc(p.basis)}</div>
+      </div>`;
+  }).join('');
+
+  return `<section class="proposal-history" aria-label="양정기준안 변경 이력">
+    <div class="proposal-history-head">
+      <div><div class="proposal-history-title">📌 양정기준(안) · ${current.version}안</div><div style="font-size:9.5px;color:var(--muted);margin-top:1px">변경 시 다음 안으로 자동 기록</div></div>
+      <span class="status-badge ${confirmed?'bg-ok':'bg-warn'}">${confirmed?'확정 완료':`${current.version}안 검토 중`}</span>
+    </div>
+    <div class="proposal-flow">${flow}</div>
+    <div class="proposal-snapshot">
+      <span>참여제한 <b>${esc(current.participation)}</b></span>
+      <span>환수 <b>${esc(current.recovery)}</b></span>
+      <span>제재부가금 <b>${esc(current.surcharge)}</b></span>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+      ${confirmed?'<span style="font-size:10px;color:var(--ok);font-weight:800">✓ 사용자가 확정한 안입니다.</span>':`<button class="btn primary small" onclick="confirmProposalVersion(${currentIndex})">${current.version}안 확정</button>`}
+      <button class="btn small" onclick="downloadPersonaDiscussionReport()">보고서</button>
+    </div>
+    <details class="proposal-master-dropdown">
+      <summary>안별 변호사·회계사·사용자 핵심 검토내용</summary>
+      <div class="proposal-master-body">${versions}</div>
+    </details>
+  </section>`;
+}
+
+function renderProposalVersionDetail(p,index){
+  if(!p) return '<div style="font-size:10.5px;color:var(--muted)">선택한 안의 기록을 찾을 수 없습니다.</div>';
+  return `<div class="proposal-version-body">
+    <div class="proposal-version-label"><span>${p.version}안 ${p.status==='confirmed'?'<span class="status-badge bg-ok">확정</span>':p.status==='rejected'?'<span class="status-badge bg-danger">거부</span>':p.status==='superseded'?'<span class="status-badge bg-hold">변경됨</span>':'<span class="status-badge bg-info">검토안</span>'}</span><span style="font-size:9px;color:var(--muted);font-weight:600">${esc(p.created_at)}</span></div>
+    <div class="proposal-current-grid">
+      <div class="proposal-current-item"><span>참여제한</span><b>${esc(p.participation)}</b></div>
+      <div class="proposal-current-item"><span>환수금액</span><b>${esc(p.recovery)}</b></div>
+      <div class="proposal-current-item"><span>제재부가금</span><b>${esc(p.surcharge)}</b></div>
+    </div>
+    <div class="proposal-review law"><b>⚖ 변호사 검토 핵심</b><br>${esc(p.law_summary)}</div>
+    <div class="proposal-review acc"><b>📊 회계사 검토 핵심</b><br>${esc(p.acc_summary)}</div>
+    <div class="proposal-review user"><b>👤 사용자 검토 핵심</b><br>${esc(p.user_summary)}</div>
+    <div class="proposal-review"><b>제안 근거</b><br>${esc(p.basis)}</div>
+  </div>`;
+}
+
+function selectProposalHistoryView(value){
+  const history=getProposalHistory(),index=Number(value);
+  if(!Number.isInteger(index)||!history[index]) return;
+  ui.proposalViewIndex=index;
+  const detail=document.getElementById('proposalSelectedDetail');
+  if(detail){detail.innerHTML=renderProposalVersionDetail(history[index],index);detail.hidden=false;}
+  const button=document.getElementById('confirmSelectedProposal');
+  if(button){button.dataset.index=String(index);button.textContent=history[index].status==='confirmed'?`${history[index].version}안 확정됨`:`${history[index].version}안 확정`;button.disabled=history[index].status==='confirmed'||history[index].status==='rejected';}
+  const rejectButton=document.getElementById('rejectSelectedProposal');
+  if(rejectButton){rejectButton.dataset.index=String(index);rejectButton.textContent=history[index].status==='rejected'?`${history[index].version}안 거부됨`:`${history[index].version}안 거부`;rejectButton.disabled=history[index].status==='confirmed'||history[index].status==='rejected';}
+}
+
+function confirmSelectedProposal(){
+  const button=document.getElementById('confirmSelectedProposal');
+  const index=Number(button?.dataset.index);
+  if(Number.isInteger(index)) confirmProposalVersion(index);
+}
+
+function rejectSelectedProposal(){
+  const button=document.getElementById('rejectSelectedProposal');
+  const index=Number(button?.dataset.index);
+  if(Number.isInteger(index)) rejectProposalVersion(index);
+}
+
+function renderProposalHistoryPanel(){
+  const history=getProposalHistory();
+  if(!history.length) return `<section class="proposal-history docked" aria-label="양정기준안 현황판"><div class="proposal-history-head"><div><div class="proposal-history-title">📌 양정기준(안) 현황</div><div style="font-size:9.5px;color:var(--muted);margin-top:1px">첫 제안이 생성되면 이 입력창 위에 1안으로 고정됩니다.</div></div><span class="status-badge bg-hold">제안 대기 중</span></div><div class="proposal-flow" aria-label="변경 흐름">1안 → 2안 → … → n안 → 확정</div></section>`;
+  const confirmed=history.findLast?history.findLast(p=>p.status==='confirmed'):history.filter(p=>p.status==='confirmed').pop();
+  const current=confirmed||history[history.length-1],currentIndex=history.indexOf(current);
+  const selectedIndex=Number.isInteger(ui.proposalViewIndex)&&history[ui.proposalViewIndex]?ui.proposalViewIndex:currentIndex;
+  const selected=history[selectedIndex];
+  const flow=history.map((p,i)=>{
+    const cls=p.status==='confirmed'?'confirmed':p.status==='rejected'?'rejected':i===history.length-1?'current':'';
+    const icon=p.status==='confirmed'?'✓ ':p.status==='rejected'?'✕ ':'';
+    return `${i?'<span class="proposal-arrow">→</span>':''}<span class="proposal-step ${cls}">${icon}${p.version}안</span>`;
+  }).join('')+`<span class="proposal-arrow">→</span><span class="proposal-step ${confirmed?'confirmed':history[history.length-1]?.status==='rejected'?'rejected':'current'}">${confirmed?'✓ 확정':history[history.length-1]?.status==='rejected'?'대안 생성 중':'검토 중'}</span>`;
+  const options=history.map((p,i)=>`<option value="${i}">${p.version}안 · ${p.status==='confirmed'?'확정':p.status==='rejected'?'거부':p.status==='superseded'?'변경됨':'검토 중'}</option>`).join('');
+  return `<section class="proposal-history docked" aria-label="양정기준안 현황판">
+    <div class="proposal-history-head"><div><div class="proposal-history-title">📌 양정기준(안) · 현재 ${current.version}안</div><div style="font-size:9.5px;color:var(--muted);margin-top:1px">입력창 위 고정 · 변경 시 다음 안으로 자동 기록</div></div><span class="status-badge ${confirmed?'bg-ok':'bg-warn'}">${confirmed?'확정 완료':`${current.version}안 검토 중`}</span></div>
+    <div class="proposal-flow" aria-label="양정안 변경 흐름">${flow}</div>
+    <div class="proposal-snapshot"><span>참여제한 <b>${esc(current.participation)}</b></span><span>환수 <b>${esc(current.recovery)}</b></span><span>제재부가금 <b>${esc(current.surcharge)}</b></span></div>
+    <div class="proposal-select-row"><div><label for="proposalVersionSelect">안별 핵심 검토내용</label><select id="proposalVersionSelect" class="select" aria-describedby="proposalSelectHint" onchange="selectProposalHistoryView(this.value)"><option value="" selected disabled>확인할 안을 선택하세요</option>${options}</select><div id="proposalSelectHint" style="font-size:9px;color:var(--muted);margin-top:3px">선택하면 변호사·회계사·사용자 요약이 펼쳐집니다.</div></div><button id="confirmSelectedProposal" class="btn primary small" data-index="${selectedIndex}" onclick="confirmSelectedProposal()" ${selected.status==='confirmed'||selected.status==='rejected'?'disabled':''}>${selected.status==='confirmed'?`${selected.version}안 확정됨`:`${selected.version}안 확정`}</button><button id="rejectSelectedProposal" class="btn danger-o small" data-index="${selectedIndex}" onclick="rejectSelectedProposal()" ${selected.status==='confirmed'||selected.status==='rejected'?'disabled':''}>${selected.status==='rejected'?`${selected.version}안 거부됨`:`${selected.version}안 거부`}</button><button class="btn small" onclick="downloadPersonaDiscussionReport()">보고서</button></div>
+    <details class="proposal-master-dropdown proposal-direct-editor"><summary>✎ 사용자가 양정안 직접 수정</summary><div class="proposal-master-body">
+      <div class="form-grid c3"><div class="field"><label>참여제한</label><input id="directProposalPart" class="input" value="${esc(current.participation)}"></div><div class="field"><label>환수금액</label><input id="directProposalRecovery" class="input" value="${esc(current.recovery)}"></div><div class="field"><label>제재부가금</label><input id="directProposalSurcharge" class="input" value="${esc(current.surcharge)}"></div></div>
+      <div class="field" style="margin-top:8px"><label>근거</label><textarea id="directProposalBasis" class="textarea" style="min-height:62px">${esc(current.basis)}</textarea></div>
+      <div class="field" style="margin-top:8px"><label>수정 사유·검토 의견</label><textarea id="directProposalReason" class="textarea" style="min-height:54px" placeholder="사용자가 변경한 이유를 입력하세요. 이 내용은 사용자 검토 요약에 기록됩니다."></textarea></div>
+      <div class="proposal-direct-actions"><span style="font-size:9.5px;color:var(--muted)">저장하면 ${history.length+1}안으로 즉시 기록됩니다.</span><button class="btn primary small" onclick="submitDirectProposalEdit(${currentIndex})" ${ui.isApiLoading?'disabled':''}>내 수정안을 새 안으로 추가</button></div>
+    </div></details>
+    <div id="proposalSelectedDetail" class="proposal-selected-detail" aria-live="polite" hidden>${renderProposalVersionDetail(selected,selectedIndex)}</div>
+  </section>`;
+}
+
+function extractLatestProposal(){
+  const history = getProposalHistory();
+  if(history.length) return history[history.length-1];
+  const regex = /\[제안\s*\|\s*참여제한\s*:\s*([\s\S]*?)\s*\|\s*환수금액\s*:\s*([\s\S]*?)\s*\|\s*제재부가금\s*:\s*([\s\S]*?)\s*\|\s*근거\s*:\s*([\s\S]*?)\]/;
+  const found = ui.discScript
+    .map(m => String(m.text || '').match(regex))
+    .filter(Boolean)
+    .pop();
+  const qNum = cp.sanctions.recovery.questioned_amount || 0;
+  if(found) {
+    return {
+      participation: found[1].trim(),
+      recovery: found[2].trim(),
+      surcharge: found[3].trim(),
+      basis: found[4].trim()
+    };
+  }
+  return {
+    participation: cp.sanctions.participation_restriction.final || UNKNOWN,
+    recovery: cp.sanctions.recovery.final_amount ? String(cp.sanctions.recovery.final_amount) + '원' : (qNum ? String(qNum) + '원' : UNKNOWN),
+    surcharge: cp.sanctions.surcharge.final_amount ? String(cp.sanctions.surcharge.final_amount) + '원' : UNKNOWN,
+    basis: '토론 결과 제31조제1항 해당성, 제32조제1항 제재사유, 금액 개념 분리, 기관·개인 귀책 분리에 대한 추가 근거 확인 필요'
+  };
+}
+
+function renderSanctionProposalPanel(){
+  if(cp.sanctions.confirmed_from_chat) return '';
+  if(!ui.discDone) return '';
+  const p = extractLatestProposal();
+  return `
+  <div class="note-card" style="border-top:4px solid var(--agent);margin-top:12px;background:#fbfffd;">
+    <h3 style="color:var(--agent)">4단계 핵심 산출물 · 양정기준(안) 제안</h3>
+    <p style="font-size:11px;color:var(--muted);margin:-4px 0 12px">토론 내용을 바탕으로 생성된 사용자 검토용 제안입니다. 확인되지 않은 기간·배수·금액은 확정하지 않습니다.</p>
+    <div class="form-grid c3">
+      <div class="field"><label>참여제한 검토안</label><input id="proposal_part" class="input" value="${esc(p.participation)}"></div>
+      <div class="field"><label>연구개발비 환수 검토안</label><input id="proposal_rec" class="input" value="${esc(p.recovery)}"></div>
+      <div class="field"><label>제재부가금 검토안</label><input id="proposal_sur" class="input" value="${esc(p.surcharge)}"></div>
+    </div>
+    <div class="field" style="margin-top:10px">
+      <label>제안 근거</label>
+      <textarea id="proposal_basis" class="textarea" style="min-height:70px">${esc(p.basis)}</textarea>
+    </div>
+    <div class="actions-row">
+      <button class="btn primary" onclick="applyProposalFromPanel()">이 양정기준(안) 확정</button>
+      <button class="btn law" onclick="downloadPersonaDiscussionReport()">토론 보고서 다운로드</button>
+      <button class="btn" onclick="startDiscussion()">토론 다시 생성</button>
+    </div>
+  </div>`;
+}
+
+function scrollToBottomDisc() {
+  const t = document.getElementById('discThreadContainer');
+  if(t) t.scrollTop = t.scrollHeight;
+}
+
+function keepProposalComposerVisible(){
+  const panel=document.querySelector('.panel-center');
+  const dock=document.querySelector('.proposal-history.docked');
+  if(!panel||!dock) return;
+  const target=Math.max(0,dock.offsetTop-110);
+  panel.scrollTo({top:target,behavior:'smooth'});
+}
+
+async function startDiscussion(){
+  if (discTimer) clearTimeout(discTimer);
+  // 시스템 오프닝 + 스트리밍 플레이스홀더
+  const openingMsg = {speaker:'sys', text: buildSystemAgentOpening()};
+  const streamMsg  = {speaker:'lawyer', text:'', streaming: true};
+  ui.discScript = [openingMsg, streamMsg];
+  ui.discStep = 1;
+  ui.discDone = false;
+  ui.discPaused = false;
+  ui.isApiLoading = true;
+  getProposalHistory().forEach(p => { if(p.status === 'confirmed') p.status = 'superseded'; });
+  cp.sanctions.confirmed_from_chat = false;
+  addLog('시스템 에이전트','토론시작','스트리밍 토론을 시작합니다.');
+  render();
+
+  let fullText = '';
+  try {
+    for await (const chunk of streamOpenAIText(buildDiscussionPrompt(), 1500)) {
+      fullText += chunk;
+      streamMsg.text = fullText;
+      patchDiscThread({streamOnly:true}); // 현재 스트리밍 말풍선의 텍스트만 갱신
+    }
+    // 스트리밍 완료 후 파싱
+    const parsed = parseDiscussionLines(fullText);
+    const normalized = normalizeDiscussionScript(parsed);
+    // 법률·회계 페르소나 양쪽이 있어야 유효한 토론으로 인정
+    const hasLawyer = normalized.some(m => m.speaker === 'lawyer');
+    const hasAccountant = normalized.some(m => m.speaker === 'accountant');
+    ui.discScript = (hasLawyer && hasAccountant) ? normalized : buildInitialDiscussionFallback();
+  } catch(err) {
+    console.error('[startDiscussion stream error]', err);
+    ui.discScript = buildInitialDiscussionFallback();
+  }
+  // 모델이 제안 태그 형식을 일부 누락해도 최초 양정안 박스가 표시되도록 안전 제안을 기록한다.
+  if(!recordProposalVersion(ui.discScript)) recordProposalVersion(buildInitialDiscussionFallback());
+
+  ui.discStep = 0;
+  ui.discDone = false;
+  ui.isApiLoading = false;
+  render();
+  setTimeout(keepProposalComposerVisible,60);
+  autoAdvanceDisc();
+}
+
+function autoAdvanceDisc() {
+  if (ui.discStep < ui.discScript.length - 1 && !ui.discPaused) {
+    discTimer = setTimeout(() => {
+      ui.discStep++;
+      patchDiscThread({appendOnly:true}); // 기존 말풍선을 유지하고 새 발언만 추가
+      autoAdvanceDisc();
+    }, 400); // 2500ms → 400ms
+  } else if (ui.discStep >= ui.discScript.length - 1) {
+    ui.discDone = true;
+    // 페르소나 검토 내용을 cp에 영구 저장
+    cp.discussion.law_review = ui.discScript
+      .filter(m => m.speaker === 'lawyer')
+      .map(m => m.text.replace(/\[제안[\s\S]*?\]/g, '').trim())
+      .filter(Boolean).join('\n');
+    cp.discussion.acc_review = ui.discScript
+      .filter(m => m.speaker === 'accountant')
+      .map(m => m.text.replace(/\[제안[\s\S]*?\]/g, '').trim())
+      .filter(Boolean).join('\n');
+    cp.discussion.completed_at = nowStr();
+    render(); // 마지막에만 전체 렌더(제안 패널 표시)
+    setTimeout(scrollToBottomDisc, 50);
+    setTimeout(keepProposalComposerVisible,70);
+  }
+}
+
+/* 토론 스레드 DOM만 부분 갱신 — 전체 render() 없이 스트리밍 중에도 호출 가능 */
+function patchDiscThread({streamOnly=false, appendOnly=false} = {}) {
+  const container = document.getElementById('discThreadContainer');
+  if (!container) return;
+  const visible = ui.discScript.slice(0, ui.discStep + 1);
+
+  // 스트리밍 중에는 전체 말풍선을 다시 만들지 않고 텍스트 노드만 프레임당 1회 갱신한다.
+  // 기존 chat-row의 fadeIn 애니메이션이 토큰마다 재시작되는 화면 깜빡임을 방지한다.
+  if (streamOnly) {
+    if (discStreamPatchFrame !== null) return;
+    discStreamPatchFrame = requestAnimationFrame(() => {
+      discStreamPatchFrame = null;
+      const currentContainer = document.getElementById('discThreadContainer');
+      const streamContent = currentContainer?.querySelector('[data-disc-stream-content]');
+      const streamMsg = ui.discScript.slice(0, ui.discStep + 1).filter(m => m.streaming).pop();
+      if (currentContainer && streamContent && streamMsg) {
+        streamContent.innerHTML = nl2br(streamMsg.text);
+        currentContainer.scrollTop = currentContainer.scrollHeight;
+      }
+    });
+    return;
+  }
+
+  // 자동 진행 시 이미 표시된 말풍선은 보존하고 새 말풍선 하나만 뒤에 붙인다.
+  if (appendOnly && container.children.length === visible.length - 1 && visible.length) {
+    container.insertAdjacentHTML('beforeend', buildDiscBubblesHtml(visible.slice(-1)));
+    container.scrollTop = container.scrollHeight;
+    return;
+  }
+
+  container.innerHTML = buildDiscBubblesHtml(visible);
+  container.scrollTop = container.scrollHeight;
+}
+
+/* 토론 말풍선 HTML 빌더 — renderPhase3와 patchDiscThread에서 공용 */
+function buildDiscBubblesHtml(msgs) {
+  return msgs.map(msg => {
+    const isLaw = msg.speaker === 'lawyer';
+    const isAcc = msg.speaker === 'accountant';
+    const isSys = msg.speaker === 'sys';
+    const cls = isLaw ? 'law' : (isAcc ? 'acc' : (isSys ? 'sys' : 'usr'));
+    const icon = isLaw ? '⚖️' : (isAcc ? '📊' : (isSys ? '✦' : '👤'));
+    const name = isLaw ? '법률 페르소나' : (isAcc ? '회계 페르소나' : (isSys ? '시스템 에이전트' : '사용자 개입'));
+
+    let textToDisplay = msg.text;
+    let proposalHtmlBlock = '';
+    const regex = /\[제안\s*\|\s*참여제한\s*:\s*([\s\S]*?)\s*\|\s*환수금액\s*:\s*([\s\S]*?)\s*\|\s*제재부가금\s*:\s*([\s\S]*?)\s*\|\s*근거\s*:\s*([\s\S]*?)\]/;
+    const match = textToDisplay.match(regex);
+    if (match) {
+      textToDisplay = textToDisplay.replace(regex, '').trim();
+      const pR = match[1].trim(), pRec = match[2].trim(), pSur = match[3].trim(), pBas = match[4].trim();
+      proposalHtmlBlock = `
+      <div style="margin-top:12px;padding:12px;background:#fff;border:1.5px solid var(--agent);border-radius:10px;text-align:left;box-shadow:0 4px 12px rgba(15,125,116,.1)">
+        <div style="font-size:11.5px;font-weight:800;color:var(--agent);margin-bottom:8px">💡 제재 양정(안) 제안</div>
+        <div style="font-size:11.5px;margin-bottom:3px"><b>참여제한:</b> ${esc(pR)}</div>
+        <div style="font-size:11.5px;margin-bottom:3px;color:var(--danger)"><b>환수금액:</b> ${esc(pRec)}</div>
+        <div style="font-size:11.5px;margin-bottom:3px;color:var(--danger)"><b>제재부가금:</b> ${esc(pSur)}</div>
+        <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.4"><b>근거:</b> ${esc(pBas)}</div>
+        <button class="btn primary block" style="height:36px;font-size:12px" data-part="${esc(pR)}" data-rec="${esc(pRec)}" data-sur="${esc(pSur)}" data-basis="${esc(pBas)}" onclick="selectProposalFromButton(this)">이 양정(안)으로 확정하기</button>
+      </div>`;
+    }
+
+    if (msg.streaming) {
+      // 스트리밍 중인 버블 — 커서 깜빡임 표시
+      return `
+      <div class="chat-row ${cls}">
+        <div class="chat-avatar ${cls}">${icon}</div>
+        <div class="chat-body">
+          <div class="chat-name ${cls}">${name}</div>
+          <div class="chat-bubble ${cls}"><div><span data-disc-stream-content>${nl2br(textToDisplay)}</span><span class="stream-cursor">▌</span></div></div>
+        </div>
+      </div>`;
+    }
+
+    if (isSys || msg.speaker === 'usr') {
+      return `
+      <div class="chat-row ${cls}">
+        <div class="chat-body">
+          <div class="chat-bubble ${cls}">
+            <div style="font-weight:800;color:var(--${cls==='sys'?'agent':'user'});margin-bottom:4px">${icon} ${name}</div>
+            <div>${nl2br(textToDisplay)}</div>
+            ${proposalHtmlBlock}
+          </div>
+        </div>
+      </div>`;
+    }
+    return `
+    <div class="chat-row ${cls}">
+      <div class="chat-avatar ${cls}">${icon}</div>
+      <div class="chat-body">
+        <div class="chat-name ${cls}">${name}</div>
+        <div class="chat-bubble ${cls}"><div>${nl2br(textToDisplay)}</div>${proposalHtmlBlock}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* OpenAI API를 활용한 동적 토론 및 양정 재제안 로직 */
+async function submitDiscIntervention() {
+  const input = document.getElementById('discIntervene');
+  const t = (input ? input.value : val('discIntervene') || '').trim();
+  if (!t || ui.isApiLoading) return;
+  const isAdditionalProposalRequest = /추가\s*안건(?:을)?\s*제안/i.test(t);
+  const isDirectProposalChange = /(바꿔|바꾸|변경|수정|조정|상향|하향|늘려|늘리|줄여|줄이|제외|삭제|반영|적용|대신)/i.test(t);
+  const requiresNewProposal = isAdditionalProposalRequest || isDirectProposalChange;
+
+  if (discTimer) clearTimeout(discTimer);
+  ui.discDone = false;
+  ui.isApiLoading = true;
+  getProposalHistory().forEach(p => { if(p.status === 'confirmed') p.status = 'superseded'; });
+  cp.sanctions.confirmed_from_chat = false;
+
+  // 사용자 발언 추가
+  ui.discScript.push({speaker: 'usr', text: t});
+  if (input) input.value = '';
+  addLog('사용자', '개입', t);
+
+  // 스트리밍 플레이스홀더 추가
+  const streamMsg = {speaker: 'lawyer', text: '', streaming: true};
+  ui.discScript.push(streamMsg);
+  ui.discStep = ui.discScript.length - 1;
+  patchDiscThread();
+
+  // 대화 맥락 (최근 6턴으로 제한 — 토큰 절약)
+  const contextStr = ui.discScript
+    .filter(m => m.speaker !== 'sys' && !m.streaming)
+    .slice(-6)
+    .map(m => {
+      const role = m.speaker === 'lawyer' ? '법률 페르소나'
+                 : m.speaker === 'accountant' ? '회계 페르소나' : '사용자';
+      return `${role}: ${m.text.replace(/\[제안[\s\S]*?\]/g, '').trim()}`;
+    }).join('\n');
+
+  const proposalHistory = getProposalHistory();
+  const latestProposal = proposalHistory[proposalHistory.length-1];
+  const nextProposalNumber = proposalHistory.length + 1;
+  const additionalProposalInstruction = isAdditionalProposalRequest ? `
+
+[추가 안건 제안 특별 지시]
+- 사용자는 기존 안의 반복 설명이 아니라 별도의 ${nextProposalNumber}안을 요청했다.
+- 기존 안: 참여제한 ${latestProposal?.participation || '미정'}, 환수금액 ${latestProposal?.recovery || '미정'}, 제재부가금 ${latestProposal?.surcharge || '미정'}, 근거 ${latestProposal?.basis || '미정'}.
+- 기존 안과 구별되는 대안을 제시하고, 어떤 전제·감경·가중·귀책·금액 판단이 달라졌는지 변호사와 회계사가 각각 설명한다.
+- 확인된 근거만으로 실질적 변경이 불가능하면 이를 명시하고 조건부 대안을 제시한다. 법령·기간·배수·금액을 임의로 만들지 않는다.
+- 마지막 제안 태그에는 새 ${nextProposalNumber}안의 내용을 반드시 넣는다.` : '';
+  const directChangeInstruction = isDirectProposalChange ? `
+
+[사용자 직접 변경 지시]
+- 사용자가 제시한 기간·금액·범위·근거의 변경 내용을 최우선으로 반영한다.
+- 변경 전후 차이를 변호사와 회계사가 짧게 검토한 뒤, 변경된 값을 마지막 제안 태그에 정확히 넣는다.
+- 사용자가 명시하지 않은 값은 기존 안을 유지하며 임의의 수치나 법령을 만들지 않는다.` : '';
+
+  const prompt = `국가연구개발사업 제재처분 검토 대화. 사건: ${cp.violation.behavior || autoGenerateBehavior()}. 문제금액: ${fmtWon(cp.sanctions.recovery.questioned_amount) || '미정'}.
+
+[최근 대화]
+${contextStr}
+
+[지시]
+- 사용자 발언에 법률 페르소나 또는 회계 페르소나가 답변. 필요하면 두 페르소나 모두 발언.
+- 근거 불명확하면 "명확한 근거를 찾을 수 없음" 사용.
+- 답변 마지막에 반드시 제안 태그 포함: [제안|참여제한:내용|환수금액:내용|제재부가금:내용|근거:요약]
+- 출력: "법률 페르소나: ..." 또는 "회계 페르소나: ..."
+${additionalProposalInstruction}${directChangeInstruction}`;
+
+  let fullText = '';
+  try {
+    for await (const chunk of streamOpenAIText(prompt, 700)) {
+      fullText += chunk;
+      streamMsg.text = fullText;
+      patchDiscThread({streamOnly:true});
+    }
+    streamMsg.streaming = false;
+
+    // 파싱 후 교체
+    const msgs = parseDiscussionLines(fullText);
+    const cleaned = msgs.filter(m =>
+      (m.speaker === 'lawyer' || m.speaker === 'accountant') && isMeaningfulPersonaText(m.text)
+    );
+    ui.discScript.pop(); // 스트리밍 플레이스홀더 제거
+    if (cleaned.length > 0) {
+      cleaned.forEach(m => ui.discScript.push(m));
+    } else if (isMeaningfulPersonaText(fullText)) {
+      ui.discScript.push({speaker: 'lawyer', text: fullText.trim()});
+    } else {
+      buildInitialDiscussionFallback()
+        .filter(m => m.speaker !== 'sys')
+        .forEach(m => ui.discScript.push(m));
+    }
+    addLog('시스템 에이전트', 'AI 답변', '개입 답변 완료.');
+  } catch (error) {
+    streamMsg.streaming = false;
+    ui.discScript.pop();
+    ui.discScript.push({speaker: 'sys', text: `오류: ${error.message}`});
+    console.error('[submitDiscIntervention]', error);
+  }
+
+  const lastUserIndex = ui.discScript.map(m => m.speaker).lastIndexOf('usr');
+  const proposalContext = ui.discScript.slice(Math.max(0,lastUserIndex));
+  let recordedProposal = recordProposalVersion(proposalContext, t, {forceNew:requiresNewProposal});
+  if(isAdditionalProposalRequest && !recordedProposal) {
+    const prior = getProposalHistory().slice(-1)[0] || extractLatestProposal();
+    const fallbackText = `[제안|참여제한:${prior.participation || UNKNOWN}|환수금액:${prior.recovery || UNKNOWN}|제재부가금:${prior.surcharge || UNKNOWN}|근거:추가안 요청에 대한 구조화 제안을 확인할 수 없어 기존안 유지 조건부 대안으로 기록함]`;
+    const fallbackMessage = {speaker:'accountant', text:fallbackText};
+    ui.discScript.push(fallbackMessage);
+    recordedProposal = recordProposalVersion([{speaker:'usr',text:t},fallbackMessage], t, {forceNew:true});
+  }
+  ui.discStep = ui.discScript.length - 1;
+  ui.isApiLoading = false;
+  render();
+  setTimeout(scrollToBottomDisc, 50);
+  setTimeout(keepProposalComposerVisible,70);
+}
+
+function selectProposalFromButton(button){
+  window.selectProposal(button.dataset.part || '', button.dataset.rec || '', button.dataset.sur || '', button.dataset.basis || '');
+}
+
+// 사용자가 채팅창 내부 또는 고정 이력 패널의 양정 제안 버튼을 클릭했을 때 실행
+window.selectProposal = function(part, rec, sur, basis) {
+  const history = getProposalHistory();
+  let selected = history.find(p => proposalSignature(p) === proposalSignature({participation:part,recovery:rec,surcharge:sur,basis}));
+  if(!selected) {
+    const previous = history[history.length-1];
+    selected = {
+      id:uid('PROP'), version:history.length+1, participation:part, recovery:rec, surcharge:sur, basis,
+      law_summary:previous?.law_summary || cp.discussion.law_review || '법률 검토 없음',
+      acc_summary:previous?.acc_summary || cp.discussion.acc_review || '회계 검토 없음',
+      user_summary:'사용자가 고정 패널에서 양정 내용을 수정하여 확정함',
+      status:'proposed', created_at:nowStr(), confirmed_at:''
+    };
+    history.push(selected);
+  }
+  history.forEach(p => { if(p !== selected) p.status = 'superseded'; });
+  selected.status = 'confirmed';
+  selected.confirmed_at = nowStr();
+  ui.proposalViewIndex=history.indexOf(selected);
+
+  cp.sanctions.participation_restriction.final = part;
+  cp.sanctions.participation_restriction.basis = basis;
+  
+  const recNum = parseInt(String(rec).replace(/[^0-9]/g, '')) || 0;
+  const surNum = parseInt(String(sur).replace(/[^0-9]/g, '')) || 0;
+
+  cp.sanctions.recovery.questioned_amount = cp.sanctions.recovery.questioned_amount || recNum;
+  cp.sanctions.recovery.final_amount = recNum;
+  cp.sanctions.recovery.formula = `전문가 토론 제안 수용: ${rec}`;
+  
+  if(surNum > 0 || sur.includes('해당')) {
+      cp.sanctions.surcharge.applicable = true;
+      cp.sanctions.surcharge.final_amount = surNum;
+      cp.sanctions.surcharge.formula = `전문가 토론 제안 수용: ${sur}`;
+      cp.sanctions.surcharge.basis = basis;
+  } else {
+      cp.sanctions.surcharge.applicable = false;
+  }
+
+  cp.sanctions.confirmed_from_chat = true;
+  ui.discDone = true; 
+  if(discTimer) clearTimeout(discTimer);
+  
+  addLog('사용자', '양정선택', `제안된 양정안 확정 수용 (참여제한: ${part}, 환수: ${rec}, 부가금: ${sur})`);
+  ui.discScript.push({speaker:'sys', text:'사용자가 제안된 양정(안)을 확정했습니다. 아래 버튼을 눌러 다음 단계로 넘어가거나, 추가 의견을 계속 제시할 수 있습니다.'});
+  ui.discStep = ui.discScript.length - 1;
+  render();
+  setTimeout(scrollToBottomDisc, 50);
+}
+
+function confirmProposalVersion(index){
+  const proposal = getProposalHistory()[index];
+  if(!proposal) return;
+  window.selectProposal(proposal.participation, proposal.recovery, proposal.surcharge, proposal.basis);
+}
+
+function submitDirectProposalEdit(baseIndex){
+  const history=getProposalHistory();
+  const base=history[baseIndex] || history[history.length-1];
+  if(!base || ui.isApiLoading) return;
+  const edited={
+    participation:(val('directProposalPart') || base.participation || UNKNOWN).trim(),
+    recovery:(val('directProposalRecovery') || base.recovery || UNKNOWN).trim(),
+    surcharge:(val('directProposalSurcharge') || base.surcharge || UNKNOWN).trim(),
+    basis:(val('directProposalBasis') || base.basis || UNKNOWN).trim()
+  };
+  const reason=(val('directProposalReason') || '').trim();
+  if(proposalSignature(edited)===proposalSignature(base)){
+    alert('변경된 양정 내용이 없습니다. 참여제한·환수금액·제재부가금·근거 중 하나를 수정해 주세요.');
+    return;
+  }
+  const labels={participation:'참여제한',recovery:'환수금액',surcharge:'제재부가금',basis:'근거'};
+  const changes=Object.keys(labels).filter(key=>String(base[key]||'').trim()!==edited[key]).map(key=>`${labels[key]}: ${base[key]||UNKNOWN} → ${edited[key]}`);
+  history.forEach(item=>{if(item.status==='proposed'||item.status==='confirmed') item.status='superseded';});
+  const version={
+    id:uid('PROP'),version:history.length+1,...edited,
+    law_summary:base.law_summary||'이전 안의 법률 검토내용을 승계함',
+    acc_summary:base.acc_summary||'이전 안의 회계 검토내용을 승계함',
+    user_summary:`사용자 직접 수정 · ${changes.join(' / ')}${reason?` / 수정 사유: ${reason}`:''}`.slice(0,320),
+    status:'proposed',created_at:nowStr(),confirmed_at:'',request_type:'user_edit',base_version:base.version
+  };
+  history.push(version);
+  ui.proposalViewIndex=history.length-1;
+  cp.sanctions.confirmed_from_chat=false;
+  ui.discDone=false;
+  ui.discScript.push({speaker:'usr',text:`${base.version}안을 직접 수정하여 ${version.version}안을 제안합니다. ${changes.join(' / ')}${reason?` / 사유: ${reason}`:''}`});
+  ui.discScript.push({speaker:'sys',text:`사용자의 직접 수정 내용이 ${version.version}안으로 현황판에 반영되었습니다. 검토 후 확정하거나 다시 수정할 수 있습니다.`});
+  ui.discStep=ui.discScript.length-1;
+  addLog('사용자','양정안 직접 수정',`${base.version}안을 수정하여 ${version.version}안을 생성했습니다.`);
+  render();
+  setTimeout(scrollToBottomDisc,50);
+  setTimeout(keepProposalComposerVisible,70);
+}
+
+function rejectProposalVersion(index){
+  const history=getProposalHistory();
+  const proposal=history[index];
+  if(!proposal || ui.isApiLoading || proposal.status==='confirmed' || proposal.status==='rejected') return;
+  proposal.status='rejected';
+  proposal.rejected_at=nowStr();
+  const rejectionNote=`사용자가 ${proposal.version}안을 거부하고 새로운 대안을 요청함`;
+  proposal.user_summary=(!proposal.user_summary||proposal.user_summary==='사용자 의견 없음')?rejectionNote:`${proposal.user_summary} / ${rejectionNote}`.slice(0,320);
+  cp.sanctions.confirmed_from_chat=false;
+  ui.discDone=false;
+  ui.proposalViewIndex=index;
+  addLog('사용자','양정안 거부',`${proposal.version}안을 거부하고 다음 안 생성을 요청했습니다.`);
+  render();
+  requestAnimationFrame(()=>{
+    const input=document.getElementById('discIntervene');
+    if(!input) return;
+    input.value=`추가안건 제안 — ${proposal.version}안 거부. 기존안과 구별되는 다음 대안을 제시해 주세요.`;
+    submitDiscIntervention();
+  });
+}
+
+function applyProposalFromPanel(){
+  const part = val('proposal_part') || UNKNOWN;
+  const rec = val('proposal_rec') || UNKNOWN;
+  const sur = val('proposal_sur') || UNKNOWN;
+  const basis = val('proposal_basis') || UNKNOWN;
+  window.selectProposal(part, rec, sur, basis);
+}
+
+function renderPhase3(){
+  const script = ui.discScript;
+  const step = ui.discStep;
+  const visible = script.slice(0, step+1);
+
+  if(script.length===0){
+    return phaseHead('STEP 04 · 법률·회계 종합토론','법률 페르소나 × 회계 페르소나 채팅 토론') + `
+    <div class="panel-inner">
+      <div class="agent-card">
+        <div class="persona-head"><div class="persona-icon agent">✦</div><div><div class="persona-name agent">확인 에이전트</div></div></div>
+        <div style="margin-top:6px">시스템 에이전트가 초반 사건 구조를 한 번 요약한 뒤, 법률 페르소나는 왼쪽, 회계 페르소나는 오른쪽 채팅 말풍선에서 각자의 관점으로 토론합니다. 사용자는 채팅 중 제안되는 양정기준(안)을 선택할 수 있습니다.</div>
+      </div>
+      <div class="actions-row">
+        <button class="btn" onclick="cp.phase=2;render()">← 이전 단계</button>
+        <button class="btn agent block" style="height:44px;font-size:13px" onclick="startDiscussion()">토론 시작 →</button>
+      </div>
+    </div>`;
+  }
+
+  ensureProposalHistoryFromDiscussion();
+  const bubblesHtml = buildDiscBubblesHtml(visible);
+
+  const proposalHistoryBlock = renderProposalHistoryPanel();
+  const confirmationBlock = cp.sanctions.confirmed_from_chat ? `
+  <div class="note-card" style="border-top:3px solid var(--agent);margin-top:12px;background:#f9fafb;">
+    <h3 style="color:var(--agent)">최종 확정된 양정(안)</h3>
+    <p style="font-size:10.5px;color:var(--muted);margin:-4px 0 12px">채팅에서 선택하신 양정안이 시스템에 반영되었습니다.</p>
+    
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:140px; background:#fff; border:1px solid var(--line); border-radius:6px; padding:10px;">
+        <div style="font-size:10.5px; font-weight:700; color:var(--navy); margin-bottom:4px;">참여제한</div>
+        <div style="font-weight:800; font-size:14px;">${esc(cp.sanctions.participation_restriction.final)}</div>
+      </div>
+      <div style="flex:1; min-width:140px; background:#fff; border:1px solid var(--line); border-radius:6px; padding:10px;">
+        <div style="font-size:10.5px; font-weight:700; color:var(--navy); margin-bottom:4px;">환수 금액</div>
+        <div style="font-weight:800; font-size:14px; color:var(--danger);">${fmtWon(cp.sanctions.recovery.final_amount)}</div>
+      </div>
+      <div style="flex:1; min-width:140px; background:#fff; border:1px solid var(--line); border-radius:6px; padding:10px;">
+        <div style="font-size:10.5px; font-weight:700; color:var(--navy); margin-bottom:4px;">제재부가금</div>
+        <div style="font-weight:800; font-size:14px; color:var(--danger);">${cp.sanctions.surcharge.applicable===false ? '해당 없음' : fmtWon(cp.sanctions.surcharge.final_amount)}</div>
+      </div>
+    </div>
+    
+    <div class="actions-row" style="margin-top:16px;">
+      <button class="btn primary block" style="height:44px;font-size:13px;" onclick="confirmDiscussionProposal()">양정(안) 확정 완료 · 심의안 정리로 이동 →</button>
+    </div>
+  </div>` : '';
+
+  return phaseHead('STEP 04 · 법률·회계 종합토론','법률 페르소나 × 회계 페르소나 채팅 토론') + `
+  <div class="panel-inner">
+    <div style="background:linear-gradient(90deg,#f8f5ff,#f5fbf8);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:11px; text-align:center;border:1px solid var(--line);">
+      <span style="color:var(--agent); font-weight:800;">✦ 시스템 에이전트: 1회 요약</span> &nbsp;·&nbsp;
+      <span style="color:var(--law); font-weight:800;">왼쪽: 법률 페르소나</span> &nbsp;×&nbsp;
+      <span style="color:var(--money); font-weight:800;">오른쪽: 회계 페르소나</span>
+    </div>
+    <div id="discThreadContainer" style="height:clamp(460px,65vh,760px); min-height:460px; max-height:75vh; overflow-y:auto; padding:10px 12px 10px 4px; border:1px solid var(--line); border-radius:8px; background:#fff; margin-bottom:10px;">${bubblesHtml}</div>
+
+    ${proposalHistoryBlock}
+    <div class="note-card" style="margin-top:5px;padding:7px 9px">
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="discIntervene" class="input" style="flex:1;" aria-label="사용자 의견 개입" placeholder="추가 사실 또는 검토 의견 입력 (Enter로 전송)" onkeydown="if(event.key==='Enter'){submitDiscIntervention()}" ${ui.isApiLoading ? 'disabled' : ''}>
+        <button class="btn primary" style="white-space:nowrap;padding:0 20px;" onclick="submitDiscIntervention()" ${ui.isApiLoading ? 'disabled' : ''}>${ui.isApiLoading ? '<span class="spinner"></span> 처리 중' : '전송'}</button>
+      </div>
+      <details class="proposal-master-dropdown" style="margin:5px 0 0"><summary>빠른 검토 질문 · 언제든 개입 가능</summary><div class="proposal-master-body" style="display:flex;flex-wrap:wrap;gap:6px">
+        <button class="btn small agent" onclick="quickIntervene('추가안건 제안')" ${ui.isApiLoading?'disabled':''}>+ 추가안건 제안</button>
+        <button class="btn small" onclick="quickIntervene('감경 사유(초범·피해 경미·협조 등)가 있나요?')" ${ui.isApiLoading?'disabled':''}>감경 사유?</button>
+        <button class="btn small" onclick="quickIntervene('기관과 개인의 귀책을 분리하여 각각 검토해 주세요')" ${ui.isApiLoading?'disabled':''}>기관/개인 분리</button>
+        <button class="btn small" onclick="quickIntervene('환수금액과 제재부가금 산정기초 개념을 분리하여 설명해 주세요')" ${ui.isApiLoading?'disabled':''}>금액 개념 분리</button>
+        <button class="btn small" onclick="quickIntervene('별표 원문 없이 기간·배수·금액을 제안하지 말아 주세요. 확인되지 않은 항목은 명확한 근거를 찾을 수 없음으로 표시해 주세요')" ${ui.isApiLoading?'disabled':''}>근거 재확인</button>
+        <button class="btn small" onclick="quickIntervene('처분권한 명의와 전문기관 대행 범위가 명확한지 확인해 주세요')" ${ui.isApiLoading?'disabled':''}>처분권한 확인</button>
+        <button class="btn small" onclick="quickIntervene('고의성 판단에 필요한 추가 증거가 있는지 검토해 주세요')" ${ui.isApiLoading?'disabled':''}>고의성 검토</button>
+      </div></details>
+    </div>
+
+    ${confirmationBlock}
+
+    <div class="actions-row" style="margin-top:8px">
+      <button class="btn" onclick="cp.phase=2;render()">← 이전 단계</button>
+    </div>
+  </div>`;
+}
+
+function buildPersonaDiscussionReport(){
+  const legalGrounds = [
+    ...cp.legal_issues.map(k => legalReferences.misconduct.find(x => x.key === k)).filter(Boolean),
+    ...cp.sanction_grounds.map(k => legalReferences.sanctionGrounds.find(x => x.key === k)).filter(Boolean)
+  ];
+  const basisLines = legalGrounds.length
+    ? legalGrounds.map(x => `- ${x.article}: ${x.text}`).join('\n')
+    : `- ${UNKNOWN}`;
+  const lawLines = ui.discScript
+    .filter(m => m.speaker === 'lawyer')
+    .map(m => `- ${m.text.replace(/\[제안[\s\S]*?\]/g, '').trim()}`)
+    .filter(line => line !== '-')
+    .join('\n') || `- ${UNKNOWN}`;
+  const accountingLines = ui.discScript
+    .filter(m => m.speaker === 'accountant')
+    .map(m => `- ${m.text.replace(/\[제안[\s\S]*?\]/g, '').trim()}`)
+    .filter(line => line !== '-')
+    .join('\n') || `- ${UNKNOWN}`;
+  return `# 법률·회계 페르소나 토론 요약 보고서
+
+> ${LEGAL_NOTICE}
+> [단일모델 모사: 페르소나 독립성 미보장]
+> 본 보고서는 채팅창 토론 내용을 근거 중심으로 요약한 검토안이며, 실제 전문가 자문 또는 처분 결정을 대체하지 않습니다.
+
+## 1. 사건 요약
+${cp.violation.behavior || autoGenerateBehavior() || UNKNOWN}
+
+## 2. 명시적으로 연결된 법적 근거
+${basisLines}
+
+## 3. 법률 페르소나 검토 요약
+${lawLines}
+
+## 4. 회계 페르소나 검토 요약
+${accountingLines}
+
+## 5. 양정기준(안) 선택 상태
+- 참여제한: ${cp.sanctions.participation_restriction.final || UNKNOWN}
+- 환수금액: ${cp.sanctions.recovery.final_amount ? fmtWon(cp.sanctions.recovery.final_amount) : UNKNOWN}
+- 제재부가금: ${cp.sanctions.surcharge.applicable === false ? '해당 없음' : (cp.sanctions.surcharge.final_amount ? fmtWon(cp.sanctions.surcharge.final_amount) : UNKNOWN)}
+- 근거: ${cp.sanctions.participation_restriction.basis || UNKNOWN}
+
+## 6. 보완 필요
+- 확인되지 않은 법령·기간·배수·금액은 ${UNKNOWN}으로 유지해야 합니다.
+- 기관과 개인의 행위·권한·인식·이익·귀책은 개별 판단해야 합니다.
+- 정산 불인정액, 위반액, 환수액, 제재부가금 산정기초는 분리해야 합니다.
+`;
+}
+
+function downloadPersonaDiscussionReport(){
+  const report = buildPersonaDiscussionReport();
+  const blob = new Blob([report], {type:'text/markdown;charset=utf-8'});
+  const a = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  a.href = url;
+  a.download = '페르소나_토론_요약보고서.md';
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+    a.remove();
+  }, 1000);
+  addLog('시스템 에이전트','보고서다운로드','법률·회계 페르소나 토론 요약 보고서를 생성했습니다.');
+  render();
+}
+
+function confirmDiscussionProposal(){
+  if(!cp.sanctions.confirmed_from_chat) {
+    alert("채팅창에 제안된 양정(안) 중 하나를 선택(클릭)하여 확정해주세요.");
+    return;
+  }
+  makeDecision({topic:'법률·회계 종합 양정(안) 확정', conclusion:`참여제한: ${cp.sanctions.participation_restriction.final} / 환수: ${fmtWon(cp.sanctions.recovery.final_amount)} / 제재부가금: ${fmtWon(cp.sanctions.surcharge.final_amount)}`, basis:[cp.sanctions.participation_restriction.basis], source:['법률·회계 토론'], decidedBy:'사용자 확정'});
+  
+  cp.phase = 4; // 심의안정리로 이동
+  render();
+}
+
+/* ============================================================
+   11. PHASE 4 — 심의안정리
+   ============================================================ */
+function renderPhase4(){
+  const pr = cp.sanctions.participation_restriction;
+  const rec = cp.sanctions.recovery;
+  const sur = cp.sanctions.surcharge;
+
+  return phaseHead('STEP 05 · 심의안정리','최종 심의 주문 확정') + `
+  <div class="panel-inner">
+    <div class="sys-note">이전 단계에서 도출된 양정안과 종합 사실관계를 확인합니다.</div>
+    
+    <div class="note-card" style="border-top:3px solid var(--navy)">
+      <h3>최종 심의 주문 내역</h3>
+      <div style="background:var(--paper-2); padding:14px; border-radius:6px;">
+        <div style="margin-bottom:10px;"><b>참여제한:</b> <span style="font-weight:800">${esc(pr.final)}</span> <br><span style="font-size:11px; color:var(--muted)">근거: ${esc(pr.basis)}</span></div>
+        <div style="margin-bottom:10px;"><b>환수금액:</b> <span style="font-weight:800; color:var(--danger);">${fmtWon(rec.final_amount)}</span> <br><span style="font-size:11px; color:var(--muted)">산식: ${esc(rec.formula)}</span></div>
+        <div><b>제재부가금:</b> <span style="font-weight:800; color:var(--danger);">${sur.applicable===false?'해당없음':fmtWon(sur.final_amount)}</span> <br><span style="font-size:11px; color:var(--muted)">산식: ${esc(sur.formula)}</span></div>
+      </div>
+      
+      <div class="field" style="margin-top:14px; border-top:1px dashed var(--line); padding-top:10px;">
+        <label>기타 조치 (해당 시 추가)</label>
+        <span class="example">예: 서면경고, 소속기관 통보 등</span>
+        <div style="display:flex;gap:6px"><input id="f_otherMeasure" class="input" placeholder="예: 서면경고"><button class="btn small" onclick="addOtherMeasure()">+ 추가</button></div>
+        <div style="margin-top:6px">${cp.sanctions.other_measures.map((m,i)=>`<span class="status-badge bg-info" style="margin:2px">${esc(m)} <span style="cursor:pointer;font-weight:900" onclick="cp.sanctions.other_measures.splice(${i},1);render()">×</span></span>`).join('')}</div>
+      </div>
+    </div>
+    
+    <div class="actions-row">
+      <button class="btn" onclick="cp.phase=3;render()">← 이전 단계</button>
+      <button class="btn primary" onclick="cp.phase=5;render()">최종 안건 생성으로 이동 →</button>
+    </div>
+  </div>`;
+}
+function addOtherMeasure(){ const v=val('f_otherMeasure'); if(v){ cp.sanctions.other_measures.push(v); addLog('사용자','기타조치',v); } render(); }
+
+/* ============================================================
+   12. PHASE 5 — 최종 안건 생성
+   ============================================================ */
+function buildMarkdownString(){
+  const p=cp.project, t=cp.target, f=cp.funding;
+  const d = {
+    projectName:p.project_name||'확인되지 않음', projectNumber:p.project_number||'확인되지 않음',
+    period:(p.total_period_start)?`${p.total_period_start} ~ ${p.total_period_end}`:'확인되지 않음',
+    institution:p.lead_institution||'확인되지 않음', target:t.person||t.institution||'확인되지 않음',
+  };
+  const pr = cp.sanctions.participation_restriction;
+  const rec = cp.sanctions.recovery;
+  const sur = cp.sanctions.surcharge;
+
+  const L = [];
+  L.push('# 제재처분 심의 안건'); L.push('');
+  L.push('## 1. 과제 및 대상자 개요'); L.push('');
+  L.push('| 항목 | 내용 |'); L.push('|---|---|');
+  L.push(`| 과제명 | ${d.projectName} |`);
+  L.push(`| 과제번호 | ${d.projectNumber} |`);
+  L.push(`| 수행기관 | ${d.institution} |`);
+  L.push(`| 처분 대상 | ${d.target} |`);
+  L.push('');
+  L.push('## 2. 심의 주문 (양정결과)'); L.push('');
+  L.push(`- **참여제한:** ${pr.final} (근거: ${pr.basis})`);
+  L.push(`- **연구개발비 환수:** ${fmtWon(rec.final_amount)} (산출: ${rec.formula})`);
+  L.push(`- **제재부가금:** ${sur.applicable===false? '해당없음' : fmtWon(sur.final_amount)} (산출: ${sur.formula})`);
+  if(cp.sanctions.other_measures.length) L.push(`- **기타 조치:** ${cp.sanctions.other_measures.join(', ')}`);
+  L.push('');
+  L.push('## 3. 위반행위 요약 (사실관계)'); L.push('');
+  L.push(cp.violation.behavior || '확인된 내용 없음');
+  L.push('');
+  L.push('## 4. 제재처분 근거 법령'); L.push('');
+  if(cp.legal_issues.length===0 && cp.sanction_grounds.length===0){
+    L.push('관련 근거 법령 미지정');
+  } else {
+    cp.legal_issues.forEach(k=>{const m=legalReferences.misconduct.find(x=>x.key===k); if(m) L.push(`- ${m.article}: ${m.text}`);});
+    cp.sanction_grounds.forEach(k=>{const s=legalReferences.sanctionGrounds.find(x=>x.key===k); if(s) L.push(`- ${s.article}: ${s.text}`);});
+  }
+  L.push(''); L.push('---');
+  L.push(`> ${LEGAL_NOTICE}`);
+  L.push(''); L.push(`_생성일시: ${nowStr()}_`);
+  return L.join('\n');
+}
+
+function mdToHtml(md){
+  const rawLines = md.split('\n');
+  let html=''; let tableRows=[]; let inTable=false;
+  function flushTable(){
+    if(tableRows.length){
+      const body = tableRows.filter(r=>!(r.length && /^-+$/.test(r[0])));
+      html += '<table>' + body.map((r,i)=>`<tr>${r.map(c=>`<${i===0?'th':'td'}>${c}</${i===0?'th':'td'}>`).join('')}</tr>`).join('') + '</table>';
+      tableRows=[];
+    }
+    inTable=false;
+  }
+  rawLines.forEach(raw=>{
+    const trimmed = raw.trim();
+    if(/^\|.*\|$/.test(trimmed)){
+      if(/^\|[\s:-]+\|$/.test(trimmed)) return; 
+      const cells = trimmed.slice(1,-1).split('|').map(c=>esc(c.trim()));
+      tableRows.push(cells); inTable=true; return;
+    } else if(inTable) flushTable();
+    const line = esc(raw);
+    if(/^# /.test(raw)) html+=`<h1>${line.slice(2)}</h1>`;
+    else if(/^## /.test(raw)) html+=`<h2>${line.slice(3)}</h2>`;
+    else if(/^- /.test(raw)) {
+        let text = line.slice(2).replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        html+=`<li>${text}</li>`;
+    }
+    else if(/^> /.test(raw)) html+=`<p class="pending-fill">${line.slice(2)}</p>`;
+    else if(trimmed==='---') html+='<hr>';
+    else if(trimmed==='') html+='';
+    else html+=`<p>${line}</p>`;
+  });
+  flushTable();
+  html = html.replace(/(?:<li>[\s\S]*?<\/li>)+/g, m=>'<ul>'+m+'</ul>');
+  return html;
+}
+
+function renderPreview(){
+  if(cp.phase<1) return `<div class="sys-note">검토 과정에서 확정된 내용이 이곳에 실시간으로 축적됩니다.</div>`;
+  const md = cp.final_document_markdown || buildMarkdownString();
+  return `<article class="preview-paper">
+    <div class="preview-kicker">국가연구개발사업 · 제재처분 심의안건 초안</div>
+    ${mdToHtml(md)}
+  </article>`;
+}
+
+function renderPhase6(){
+  if(!cp.final_document_markdown) {
+      cp.final_document_markdown = buildMarkdownString();
+      addLog('시스템 에이전트','문서생성','최종 안건 마크다운을 생성했습니다.');
+  }
+  return phaseHead('STEP 06 · 안건생성','제재처분 안건 생성') + `
+  <div class="panel-inner">
+    <div class="actions-row" style="margin-bottom:12px">
+      <button class="btn ${ui.docTab!=='md'?'primary':''}" onclick="ui.docTab='doc';render()">문서 보기</button>
+      <button class="btn ${ui.docTab==='md'?'primary':''}" onclick="ui.docTab='md';render()">마크다운 원문</button>
+    </div>
+    ${ui.docTab==='md'?`<textarea class="textarea" style="min-height:520px;font-family:ui-monospace,Consolas,monospace;font-size:11px" readonly>${esc(cp.final_document_markdown)}</textarea>`:renderPreview()}
+    <div class="actions-row" style="margin-top:14px;flex-wrap:wrap">
+      <button class="btn primary" onclick="copyMarkdown()">마크다운 복사</button>
+      <button class="btn" onclick="window.print()">인쇄하기</button>
+      <button class="btn" onclick="exportCasePacketJSON()">JSON 데이터 저장</button>
+      <button class="btn danger-o" style="border:2px solid var(--danger); font-weight:800;" onclick="goToMockDisposition()">모의 토의 (리스크 점검) ▷</button>
+    </div>
+    <div class="actions-row"><button class="btn" onclick="cp.phase=4;render()">← 이전 단계</button></div>
+  </div>`;
+}
+
+function regenerateDoc(){ cp.final_document_markdown = buildMarkdownString(); render(); }
+function copyMarkdown(){
+  navigator.clipboard.writeText(cp.final_document_markdown).then(()=>{
+    alert('제재처분 안건이 복사되었습니다.');
+  });
+}
+function exportCasePacketJSON(){
+  const blob = new Blob([JSON.stringify(cp,null,2)], {type:'application/json;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); 
+  a.download = `검토기록.json`;
+  a.click(); 
+}
+
+/* ============================================================
+   13. PHASE 6 — 모의 처분 위원회 (리스크 점검 - 동적 API 연동)
+   ============================================================ */
+function scrollToBottomMockDisc() {
+  const t = document.getElementById('mockDiscThreadContainer');
+  if(t) t.scrollTop = t.scrollHeight;
+}
+
+function patchMockDiscThread() {
+  const c = document.getElementById('mockDiscThreadContainer');
+  if (!c) return;
+  c.innerHTML = buildMockBubblesHtml(ui.mockDiscScript.slice(0, ui.mockDiscStep + 1));
+  c.scrollTop = c.scrollHeight;
+}
+
+async function startMockDiscussion(){
+  if (mockDiscTimer) clearTimeout(mockDiscTimer);
+
+  const openingMsg = {speaker:'sys', text:`모의 처분 위원회를 시작합니다. 5인의 전문가가 아래 확정 안건의 소송 리스크와 미비점을 집중 점검합니다.\n참여제한: ${cp.sanctions.participation_restriction.final||'미정'} / 환수: ${fmtWon(cp.sanctions.recovery.final_amount)||'미정'} / 제재부가금: ${cp.sanctions.surcharge.applicable===false?'해당없음':(fmtWon(cp.sanctions.surcharge.final_amount)||'미정')}`};
+  const streamMsg = {speaker:'law-prog', text:'', streaming: true};
+  ui.mockDiscScript = [openingMsg, streamMsg];
+  ui.mockDiscStep = 1;
+  ui.mockDiscDone = false;
+  ui.isMockApiLoading = true;
+  addLog('시스템 에이전트','모의토론시작','5인 위원 모의 처분 토의를 시작합니다.');
+  render();
+
+  const prompt = `너는 국가연구개발사업 제재처분 심의 위원회의 다섯 전문가를 동시에 연기하는 AI다.
+각 위원은 서로 다른 성향·말투를 가지며, 아래 역할에 맞게 발언해야 한다.
+
+[위원 구성 및 성격]
+1. 이민준 변호사(공격): 정부 패소 판례를 꿰고 있는 공격형. 절차·재량 결함을 예리하게 찌름. 단호·직설. "이건 취소 가능합니다", "절차 하자가 있어요" 식.
+2. 김태원 변호사(수비): 조문 원문 중심 수비형. 신중·완서. "원문을 다시 확인하겠습니다", "아직 단정하기 어렵습니다" 식.
+3. 박서연 회계사(공격): 금액 산정 오류 공격형. 예리·빠름. "이 산식 기초가 틀렸어요", "환수와 부가금 기준이 혼용됐습니다" 식.
+4. 최두현 회계사(수비): 정산서 줄 단위 검토형. 꼼꼼·단계적. "서두르지 맙시다, 하나씩 확인합시다" 식.
+5. 정상민 행정전문가: 조문만 인용하는 가장 엄격한 전문가. 공식·건조. "행정절차법 제21조 사전통지 요건을 확인해야 합니다", "혁신법 제32조제4항 고려사항 반영 여부를 체크해야 합니다" 식. 항상 조문 번호 명시.
+
+[확정 안건]
+- 참여제한: ${cp.sanctions.participation_restriction.final || '미정'}
+- 환수금액: ${fmtWon(cp.sanctions.recovery.final_amount) || '미정'}
+- 제재부가금: ${cp.sanctions.surcharge.applicable===false?'해당없음':(fmtWon(cp.sanctions.surcharge.final_amount)||'미정')}
+- 위반행위: ${cp.violation.behavior || '(미입력)'}
+
+[토의 목표]
+1. 절차적 하자(사전통지·소명·처분사유 고지 등) 및 입증 부족 지적
+2. 행정소송 리스크(재량권 일탈·남용, 금액 산정 근거 미비, 시효) 분석
+3. 처분권한 명의·전문기관 대행 범위 확인
+4. 안건 보완 방향 제시
+
+[출력 형식 — 반드시 준수]
+- 각 줄은 반드시 "이민준: ", "김태원: ", "박서연: ", "최두현: ", "정상민: " 중 하나로 시작한다.
+- **, ##, 숫자+점 등 마크다운을 절대 사용하지 않는다.
+- 5명이 번갈아 발언, 1인당 최소 1줄 이상, 전체 10~15줄.
+- 이민준·박서연은 공격적으로, 김태원·최두현은 신중하게, 정상민은 조문만 인용해서 발언한다.`;
+
+  let fullText = '';
+  try {
+    for await (const chunk of streamOpenAIText(prompt, 2000)) {
+      fullText += chunk;
+      streamMsg.text = fullText;
+      patchMockDiscThread();
+    }
+    streamMsg.streaming = false;
+    const parsed = parseMockDiscussionLines(fullText);
+    const personas = parsed.filter(m => MOCK_COMMITTEE[m.speaker]);
+    ui.mockDiscScript = personas.length >= 3
+      ? [openingMsg, ...personas]
+      : [openingMsg, {speaker:'law-prog', text: fullText.trim() || '모의 토의 생성을 완료하지 못했습니다.'}];
+  } catch(err) {
+    ui.mockDiscScript = [{speaker:'sys', text:`API 오류: ${err.message}`}];
+    console.error('[startMockDiscussion]', err);
+  }
+
+  ui.mockDiscStep = 0;
+  ui.mockDiscDone = false;
+  ui.isMockApiLoading = false;
+  render();
+  autoAdvanceMockDisc();
+}
+
+function autoAdvanceMockDisc() {
+  if (ui.mockDiscStep < ui.mockDiscScript.length - 1) {
+    mockDiscTimer = setTimeout(() => {
+      ui.mockDiscStep++;
+      patchMockDiscThread();
+      autoAdvanceMockDisc();
+    }, 400);
+  } else if (ui.mockDiscStep >= ui.mockDiscScript.length - 1) {
+    ui.mockDiscDone = true;
+    render();
+    setTimeout(scrollToBottomMockDisc, 50);
+  }
+}
+
+async function submitMockDiscIntervention() {
+  const input = document.getElementById('mockDiscIntervene');
+  const t = (input ? input.value : val('mockDiscIntervene') || '').trim();
+  if (!t || ui.isMockApiLoading) return;
+
+  if (mockDiscTimer) clearTimeout(mockDiscTimer);
+  ui.mockDiscDone = false;
+  ui.isMockApiLoading = true;
+
+  ui.mockDiscScript = ui.mockDiscScript.slice(0, ui.mockDiscStep + 1);
+  ui.mockDiscScript.push({speaker:'usr', text: t});
+  if (input) input.value = '';
+  addLog('사용자', '모의토론 개입', t);
+
+  const streamMsg = {speaker:'law-prog', text:'', streaming: true};
+  ui.mockDiscScript.push(streamMsg);
+  ui.mockDiscStep = ui.mockDiscScript.length - 1;
+  patchMockDiscThread();
+
+  const contextStr = ui.mockDiscScript
+    .filter(m => !m.streaming)
+    .slice(-8)
+    .map(m => {
+      const p = MOCK_COMMITTEE[m.speaker];
+      const label = p ? p.name : (m.speaker === 'usr' ? '위원장' : '시스템');
+      return `${label}: ${m.text.trim()}`;
+    }).join('\n');
+
+  const prompt = `국가연구개발사업 제재처분 모의 위원회 (5인). 위반행위: ${cp.violation.behavior || '미입력'}.
+
+[위원 역할]
+이민준(공격형 변호사): 절차·재량 결함 공격. 단호 직설.
+김태원(수비형 변호사): 조문 원문 중심. 신중 완서.
+박서연(공격형 회계사): 금액 산정 오류 공격. 예리 빠름.
+최두현(수비형 회계사): 정산 줄 단위 검토. 꼼꼼 단계적.
+정상민(행정전문가): 조문만 인용. 공식 건조. 항상 조문 번호 명시.
+
+[최근 토의]
+${contextStr}
+
+[지시]
+- 위원장(사용자) 발언에 적절한 위원 2~3명이 각자의 성향대로 답변한다.
+- 각 줄은 반드시 "이민준: ", "김태원: ", "박서연: ", "최두현: ", "정상민: " 중 하나로 시작한다.
+- **, ## 등 마크다운 금지. 전체 4~6줄.`;
+
+  let fullText = '';
+  try {
+    for await (const chunk of streamOpenAIText(prompt, 900)) {
+      fullText += chunk;
+      streamMsg.text = fullText;
+      patchMockDiscThread();
+    }
+    streamMsg.streaming = false;
+    const parsed = parseMockDiscussionLines(fullText);
+    const personas = parsed.filter(m => MOCK_COMMITTEE[m.speaker]);
+    ui.mockDiscScript.pop();
+    if (personas.length > 0) {
+      personas.forEach(m => ui.mockDiscScript.push(m));
+    } else if (fullText.trim()) {
+      ui.mockDiscScript.push({speaker:'law-prog', text: fullText.trim()});
+    } else {
+      ui.mockDiscScript.push({speaker:'sys', text:'답변을 생성하지 못했습니다. 다시 시도해 주세요.'});
+    }
+    addLog('시스템 에이전트', 'AI 답변', '모의토론 개입 답변 완료.');
+  } catch (error) {
+    streamMsg.streaming = false;
+    ui.mockDiscScript.pop();
+    ui.mockDiscScript.push({speaker:'sys', text:`API 오류: ${error.message}`});
+    console.error('[submitMockDiscIntervention]', error);
+  }
+
+  ui.mockDiscStep = ui.mockDiscScript.length - 1;
+  ui.isMockApiLoading = false;
+  render();
+  setTimeout(scrollToBottomMockDisc, 50);
+}
+
+function renderPhase7() {
+  const script = ui.mockDiscScript;
+  const step = ui.mockDiscStep;
+  const done = ui.mockDiscDone;
+  const visible = script.slice(0, step + 1);
+
+  // 위원 명단 로스터 HTML
+  const rosterHtml = Object.values(MOCK_COMMITTEE).map(p => {
+    const colors = {
+      'law-prog':'var(--danger)','law-cons':'#3d3472',
+      'acc-prog':'#a85a00','acc-cons':'var(--money)','admin':'#7a520a'
+    };
+    const bgColors = {
+      'law-prog':'var(--danger-soft)','law-cons':'#f0edf9',
+      'acc-prog':'#fff4e6','acc-cons':'var(--money-soft)','admin':'var(--amber-soft)'
+    };
+    return `<div style="flex:1;min-width:130px;background:${bgColors[p.key]};border:1px solid rgba(0,0,0,0.07);border-radius:8px;padding:8px 10px">
+      <div style="font-size:15px;margin-bottom:3px">${p.icon}</div>
+      <div style="font-size:10.5px;font-weight:800;color:${colors[p.key]}">${p.fullName}</div>
+      <div style="font-size:9px;color:var(--muted);margin-bottom:3px">${p.role}</div>
+      <div style="font-size:9.5px;color:var(--ink-2);line-height:1.4">${p.profile}</div>
+    </div>`;
+  }).join('');
+
+  if (script.length === 0) {
+    return phaseHead('STEP 07 · 모의 처분 위원회','소송 리스크 및 안건 미비점 점검') + `
+    <div class="panel-inner">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${rosterHtml}</div>
+      <div class="agent-card">
+        <div class="persona-head"><div class="persona-icon agent">✦</div><div><div class="persona-name agent">확인 에이전트</div></div></div>
+        <div style="margin-top:6px;font-size:11.5px">5인의 전문가가 실제 위원회처럼 확정 안건의 절차적 하자·재량권 일탈·금액 산정 근거 미비 등을 집중 점검합니다. 이민준·박서연은 공격적 리스크를 발굴하고, 김태원·최두현은 신중하게 검토하며, 정상민은 조문만 인용하여 점검합니다.</div>
+      </div>
+      <div class="actions-row">
+        <button class="btn" onclick="cp.phase=5;render()">← 이전 단계</button>
+        <button class="btn danger-o block" style="height:44px;font-size:13px;border-width:2px;font-weight:800;" onclick="startMockDiscussion()">모의 처분 위원회 시작 ▷</button>
+      </div>
+    </div>`;
+  }
+
+  const bubblesHtml = buildMockBubblesHtml(visible);
+
+  return phaseHead('STEP 07 · 모의 처분 위원회','소송 리스크 및 안건 미비점 점검') + `
+  <div class="panel-inner">
+    <details style="margin-bottom:10px">
+      <summary style="cursor:pointer;font-size:10.5px;font-weight:800;color:var(--navy);padding:6px 10px;background:var(--paper-2);border-radius:6px;list-style:none">▶ 위원 구성 보기 (5인)</summary>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">${rosterHtml}</div>
+    </details>
+    <div style="background:linear-gradient(90deg,#fff5f5,#fdf9f4);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:11px;text-align:center;border:1px solid rgba(161,60,60,.15);">
+      <span style="color:var(--danger);font-weight:800;">🚨 소송 리스크·안건 방어 논리 집중 점검</span>
+      &nbsp;·&nbsp;<span style="color:#3d3472;font-weight:700">⚖ 공격</span>
+      <span style="color:#3d3472;font-weight:700"> vs 📜 수비</span>
+      &nbsp;·&nbsp;<span style="color:#a85a00;font-weight:700">📊 공격</span>
+      <span style="color:var(--money);font-weight:700"> vs 🔢 수비</span>
+      &nbsp;·&nbsp;<span style="color:#7a520a;font-weight:700">🏛 행정</span>
+    </div>
+    <div id="mockDiscThreadContainer" style="min-height:200px;max-height:480px;overflow-y:auto;padding-right:6px;border-bottom:1px solid var(--line);margin-bottom:12px">${bubblesHtml}</div>
+
+    <div class="note-card" style="margin-top:10px">
+      <h3>위원장 발언 <span class="tag">언제든 개입 가능</span></h3>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+        <button class="btn small" onclick="submitMockWithText('절차적 하자가 소송에서 문제될 가능성을 중심으로 검토해 주세요')" ${ui.isMockApiLoading?'disabled':''}>절차 하자 집중</button>
+        <button class="btn small" onclick="submitMockWithText('재량권 일탈·남용 주장이 법원에서 인용될 가능성은 얼마나 됩니까')" ${ui.isMockApiLoading?'disabled':''}>재량권 리스크</button>
+        <button class="btn small" onclick="submitMockWithText('환수금액과 제재부가금 산정 근거가 법원에서 인정받을 수 있는지 검토해 주세요')" ${ui.isMockApiLoading?'disabled':''}>금액 산정 검토</button>
+        <button class="btn small" onclick="submitMockWithText('처분 시효(제32조제5항 10년) 준수 여부를 확인해 주세요')" ${ui.isMockApiLoading?'disabled':''}>처분 시효</button>
+        <button class="btn small" onclick="submitMockWithText('보완이 필요한 증거·서류 목록을 정리해 주세요')" ${ui.isMockApiLoading?'disabled':''}>보완 서류 목록</button>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="mockDiscIntervene" class="input" style="flex:1;" placeholder="질문하거나 보완 방향을 제시하세요 (Enter 전송)" onkeydown="if(event.key==='Enter') submitMockDiscIntervention()" ${ui.isMockApiLoading?'disabled':''}>
+        <button class="btn primary" style="white-space:nowrap;padding:0 20px;" onclick="submitMockDiscIntervention()" ${ui.isMockApiLoading?'disabled':''}>${ui.isMockApiLoading?'<span class="spinner"></span> 처리 중':'전송'}</button>
+      </div>
+    </div>
+
+    ${done ? `
+    <div class="actions-row" style="margin-top:16px;">
+      <button class="btn" onclick="startMockDiscussion()">토의 다시 시작</button>
+      <button class="btn" onclick="cp.phase=5;render()">← 안건 수정</button>
+      <button class="btn primary" style="background:var(--danger);border-color:var(--danger);" onclick="alert('모의 처분 위원회 검토가 완료되었습니다. 최종 안건을 바탕으로 실제 심의를 준비하세요.');">위원회 종료 · 최종 완료</button>
+    </div>` : ''}
+  </div>`;
+}
+
+function submitMockWithText(text) {
+  const input = document.getElementById('mockDiscIntervene');
+  if (input) input.value = text;
+  submitMockDiscIntervention();
+}
+
+function goToMockDisposition(){
+  cp.phase = 6;
+  addLog('사용자', '모의처분', '모의 처분 시뮬레이션을 실행했습니다.');
+  render();
+}
+
+function confirmReset(){
+  if(confirm('모든 내용이 초기화됩니다. 계속하시겠습니까?')){
+    cp = createCasePacket();
+    Object.assign(ui, {chatOpen:false, mobileTab:'center', interviewQs:null, discScript:[], discStep:0, discDone:false, mockDiscScript:[], mockDiscStep:0, mockDiscDone:false});
+    render();
+  }
+}
+
+/* ============================================================
+   14. 챗봇 도우미 (API 연동)
+   ============================================================ */
+function toggleChat(){
+  ui.chatOpen = !ui.chatOpen;
+  const panel = document.getElementById('chatPanel');
+  if(!panel) return;
+  if(ui.chatOpen){
+    panel.classList.add('open');
+    if(ui.chatHistory.length===0){
+      ui.chatHistory.push({role:'agent', text:`안녕하세요! 제재처분 시스템 도우미입니다. 사용법이나 관련 법령, 가이드가 필요하시면 편하게 질문해 주세요.`});
+      renderChatMessages();
+    }
+  } else { panel.classList.remove('open'); }
+}
+
+function renderChatMessages(){
+  const box = document.getElementById('chatMsgs');
+  if(!box) return;
+  box.innerHTML = ui.chatHistory.map(m=>{
+    if (m.text.includes('<span class="spinner">')) {
+      return `<div class="cmsg-${m.role==='user'?'user':'agent'}">${m.text}</div>`;
+    }
+    return `<div class="cmsg-${m.role==='user'?'user':'agent'}">${nl2br(m.text)}</div>`;
+  }).join('');
+  box.scrollTop = box.scrollHeight;
+}
+
+async function sendChat(){
+  const input = document.getElementById('chatInput');
+  if(!input || !input.value.trim()) return;
+  
+  const q = input.value.trim(); 
+  input.value = '';
+  
+  ui.chatHistory.push({role:'user', text:q});
+  ui.chatHistory.push({role:'agent', text:'<span class="spinner dark"></span> 답변을 작성 중입니다...'});
+  renderChatMessages();
+
+  const prompt = `
+  너는 '국가연구개발사업 제재처분 안건 초안 작성 시스템'의 친절한 안내 도우미(챗봇)야.
+  사용자는 시스템 사용법, 관련 법령(국가연구개발혁신법 등), 진행 절차 등에 대해 물어볼 거야.
+  아주 간결하고 가독성 좋게, 친절한 어조로 답변해 줘.
+  출처나 법적 근거가 명확하지 않으면 '모르겠습니다'라고 해.
+  가짜 URL이나 가짜 판례, 허위 규정은 절대로 지어내지 마.
+
+  [사용자 질문]
+  ${q}
+  `;
+
+  try {
+    const reply = await getOpenAIResponse(prompt);
+    ui.chatHistory.pop(); // Remove spinner
+    ui.chatHistory.push({role:'agent', text: reply.trim()});
+  } catch (error) {
+    ui.chatHistory.pop();
+    ui.chatHistory.push({role:'agent', text: `API 통신 오류로 답변할 수 없습니다: ${error.message}`});
+  }
+  
+  renderChatMessages();
+}
+
+function setMobileTab(t){ ui.mobileTab=t; render(); }
+function startCase(){ cp.phase=0; addLog('사용자','시작','사건 접수를 시작했습니다.'); render(); }
+
+function quickIntervene(text) {
+  const input = document.getElementById('discIntervene');
+  if (input) input.value = text;
+  submitDiscIntervention();
+}
+
+render();
+requestAnimationFrame(openOpenAIApiDialog);
+</script>
+</body>
+</html>
